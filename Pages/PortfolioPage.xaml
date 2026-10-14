@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:AndiswaConsultationApp.Controls"
+             x:Class="AndiswaConsultationApp.Pages.PortfolioPage"
+             BackgroundColor="White"
+             Shell.NavBarIsVisible="False">
+    <ScrollView>
+        <VerticalStackLayout Padding="24,56,24,40" Spacing="20">
+            <controls:SectionHeader Tag="OUR WORK" TitleMain="Our Portfolio" TitleAccent="Coming soon" />
+            <Label Text="This page is being built by a team member." FontSize="16" TextColor="{StaticResource Muted}" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

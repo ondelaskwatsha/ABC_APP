@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  App.xaml  -  the THEME of the whole app (colours and styles).
+
+  Anything defined here can be used on every page with {StaticResource Name}.
+  Example:  TextColor="{StaticResource Primary}"
+  If you change a colour here, it changes on every page at once.
+-->
+<Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AndiswaConsultationApp.App">
+    <Application.Resources>
+        <ResourceDictionary>
+
+            <!-- THE LIGHT BLUE THEME. Everyone on the team: use these colours so all pages match. -->
+            <Color x:Key="Primary">#1F7AC2</Color>       <!-- buttons, links, highlights (dark enough for white text) -->
+            <Color x:Key="Sky">#4DA6E8</Color>           <!-- light blue accents -->
+            <Color x:Key="SkyLight">#EAF5FD</Color>      <!-- very soft blue backgrounds and cards -->
+            <Color x:Key="SkyBorder">#CFE6F7</Color>     <!-- thin outlines -->
+            <Color x:Key="Ink">#0F2A3D</Color>           <!-- main text (dark navy) -->
+            <Color x:Key="Muted">#4A6A82</Color>         <!-- smaller grey-blue text -->
+
+            <!--
+              A Style is a reusable set of settings.
+              Instead of repeating 5 settings on every form field, we write them once here
+              and use Style="{StaticResource FieldBorder}" on the page.
+            -->
+
+            <!-- Rounded outline around each form field on the Contact page -->
+            <Style x:Key="FieldBorder" TargetType="Border">
+                <Setter Property="Stroke" Value="{StaticResource SkyBorder}" />
+                <Setter Property="StrokeThickness" Value="1.5" />
+                <Setter Property="StrokeShape" Value="RoundRectangle 12" />
+                <Setter Property="Padding" Value="14,0" />
+                <Setter Property="BackgroundColor" Value="White" />
+            </Style>
+
+            <!-- The text box inside the outline -->
+            <Style x:Key="FieldEntry" TargetType="Entry">
+                <Setter Property="FontSize" Value="16" />
+                <Setter Property="TextColor" Value="{StaticResource Ink}" />
+                <Setter Property="PlaceholderColor" Value="#8AA4B8" />
+                <Setter Property="BackgroundColor" Value="Transparent" />
+                <Setter Property="HeightRequest" Value="52" />
+            </Style>
+
+            <!-- The small title above each field, for example "Email Address" -->
+            <Style x:Key="FieldLabel" TargetType="Label">
+                <Setter Property="FontSize" Value="14" />
+                <Setter Property="TextColor" Value="{StaticResource Ink}" />
+                <Setter Property="Margin" Value="0,14,0,6" />
+            </Style>
+
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+  ContactPage.xaml  -  WHAT the Contact page looks like.
+  ContactPage.xaml.cs checks the form and sends it.
+
+  The page from top to bottom:
+    1. Title and short text
+    2. Message box (only visible when offline or on error)
+    3. The form: first name, last name, email, phone, service, message, Send button
+    4. Contact details card (email, phone, location, hours)
+    5. Owner card (round circle with initials + name)
+    6. Social media buttons (only shown if links exist in the database)
+
+  x:Name="FirstNameEntry" gives a field a name so the C# code can read what was typed.
+  Style="{StaticResource FieldBorder}" uses the shared style from App.xaml.
+-->
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:AndiswaConsultationApp.Controls"
+             x:Class="AndiswaConsultationApp.Pages.ContactPage"
+             BackgroundColor="White"
+             Shell.NavBarIsVisible="False">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="24,56,24,40" Spacing="8">
+
+            <!-- ===== 1. TITLE ===== -->
+            <controls:SectionHeader Tag="GET IN TOUCH" TitleMain="Let's Create Something" TitleAccent="Amazing Together" />
+
+            <Label Text="Ready to elevate your brand? Drop us a message and let's start the conversation."
+                   FontSize="17" LineHeight="1.45" TextColor="{StaticResource Muted}" Margin="0,14,0,10" />
+
+            <!-- ===== 2. MESSAGE BOX ===== -->
+            <controls:ErrorBox x:Name="ErrorBox" Margin="-24,0" />
+
+            <!-- ===== 3. THE FORM. It saves into the same quotes table as the website, so the admin sees it. ===== -->
+            <Label Text="First Name" Style="{StaticResource FieldLabel}" />
+            <Border Style="{StaticResource FieldBorder}">
+                <Entry x:Name="FirstNameEntry" Placeholder="Ayanda" Style="{StaticResource FieldEntry}" />
+            </Border>
+
+            <Label Text="Last Name" Style="{StaticResource FieldLabel}" />
+            <Border Style="{StaticResource FieldBorder}">
+                <Entry x:Name="LastNameEntry" Placeholder="Zulu" Style="{StaticResource FieldEntry}" />
+            </Border>
+
+            <!-- Keyboard="Email" shows a keyboard with the @ key on phones -->
+            <Label Text="Email Address" Style="{StaticResource FieldLabel}" />
+            <Border Style="{StaticResource FieldBorder}">
+                <Entry x:Name="EmailEntry" Placeholder="you@company.co.za" Keyboard="Email"
+                       Style="{StaticResource FieldEntry}" />
+            </Border>
+
+            <!-- Keyboard="Telephone" shows the number keypad -->
+            <Label Text="Phone Number (optional)" Style="{StaticResource FieldLabel}" />
+            <Border Style="{StaticResource FieldBorder}">
+                <Entry x:Name="PhoneEntry" Placeholder="+27 123 456 789" Keyboard="Telephone"
+                       Style="{StaticResource FieldEntry}" />
+            </Border>
+
+            <!-- Picker = a drop-down list. Its choices are filled in by ContactPage.xaml.cs -->
+            <Label Text="Service Required" Style="{StaticResource FieldLabel}" />
+            <Border Style="{StaticResource FieldBorder}">
+                <Picker x:Name="ServicePicker" Title="Select a service" TitleColor="#8AA4B8"
+                        TextColor="{StaticResource Ink}" FontSize="16" HeightRequest="52"
+                        BackgroundColor="Transparent" />
+            </Border>
+
+            <!-- Editor = a text box for several lines of text -->
+            <Label Text="Tell us about the project" Style="{StaticResource FieldLabel}" />
+            <Border Style="{StaticResource FieldBorder}" Padding="10,6">
+                <Editor x:Name="MessageEditor" Placeholder="What are you looking to grow?"
+                        PlaceholderColor="#8AA4B8" TextColor="{StaticResource Ink}" FontSize="16"
+                        BackgroundColor="Transparent" HeightRequest="150" MaxLength="4000" />
+            </Border>
+
+            <!-- Clicked="OnSendClicked" runs that method in ContactPage.xaml.cs -->
+            <Button x:Name="SendButton" Text="Send Message  →" BackgroundColor="{StaticResource Primary}" TextColor="White"
+                    FontAttributes="Bold" FontSize="16" CornerRadius="12" HeightRequest="54"
+                    Margin="0,18,0,0" Clicked="OnSendClicked" />
+
+            <Label Text="We typically reply within one business day." FontSize="13" TextColor="{StaticResource Muted}"
+                   HorizontalOptions="Center" />
+
+            <!-- A spinning circle shown while sending -->
+            <ActivityIndicator x:Name="Busy" Color="{StaticResource Primary}" IsRunning="False" IsVisible="False" />
+
+            <!-- ===== 4. CONTACT DETAILS (from the website's settings table) =====
+                 Tapping the email or phone opens the mail or phone app (see OnEmailTapped / OnPhoneTapped) -->
+            <Border BackgroundColor="{StaticResource SkyLight}" Stroke="{StaticResource SkyBorder}" StrokeThickness="1"
+                    StrokeShape="RoundRectangle 18" Padding="22" Margin="0,24,0,0">
+                <VerticalStackLayout Spacing="20">
+
+                    <VerticalStackLayout Spacing="3">
+                        <Label Text="EMAIL" FontSize="12" CharacterSpacing="1" TextColor="{StaticResource Primary}" />
+                        <Label Text="{Binding Email}" FontSize="16" TextColor="{StaticResource Ink}">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnEmailTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="3">
+                        <Label Text="PHONE" FontSize="12" CharacterSpacing="1" TextColor="{StaticResource Primary}" />
+                        <Label Text="{Binding Phone}" FontSize="16" TextColor="{StaticResource Ink}">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPhoneTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="3">
+                        <Label Text="LOCATION" FontSize="12" CharacterSpacing="1" TextColor="{StaticResource Primary}" />
+                        <Label Text="{Binding Address}" FontSize="16" TextColor="{StaticResource Ink}" />
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="3">
+                        <Label Text="BUSINESS HOURS" FontSize="12" CharacterSpacing="1" TextColor="{StaticResource Primary}" />
+                        <Label Text="{Binding Hours}" FontSize="16" TextColor="{StaticResource Ink}" />
+                    </VerticalStackLayout>
+
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- ===== 5. OWNER CARD: a round blue circle with initials, then name and title ===== -->
+            <Border Stroke="{StaticResource SkyBorder}" StrokeThickness="1" StrokeShape="RoundRectangle 18"
+                    BackgroundColor="White" Padding="22" Margin="0,16,0,0">
+                <HorizontalStackLayout Spacing="18">
+                    <!-- A 64 x 64 box with corners of 32 = a circle -->
+                    <Border BackgroundColor="{StaticResource Sky}" StrokeThickness="0" StrokeShape="RoundRectangle 32"
+                            WidthRequest="64" HeightRequest="64">
+                        <Label Text="{Binding OwnerInitials}" FontSize="22" FontAttributes="Bold"
+                               TextColor="White" HorizontalOptions="Center" VerticalOptions="Center" />
+                    </Border>
+                    <VerticalStackLayout VerticalOptions="Center" Spacing="2">
+                        <Label Text="{Binding OwnerName}" FontSize="19" FontAttributes="Bold" TextColor="{StaticResource Ink}" />
+                        <Label Text="{Binding OwnerTitle}" FontSize="15" TextColor="{StaticResource Muted}" />
+                    </VerticalStackLayout>
+                </HorizontalStackLayout>
+            </Border>
+
+            <!-- ===== 6. SOCIAL MEDIA. Hidden until the database has at least one link.
+                 The round buttons are created in ContactPage.xaml.cs (BuildSocialButtons). ===== -->
+            <VerticalStackLayout x:Name="SocialSection" IsVisible="False" Margin="0,22,0,0" Spacing="10">
+                <Label Text="FOLLOW US" FontSize="14" CharacterSpacing="1" TextColor="{StaticResource Muted}" />
+                <HorizontalStackLayout x:Name="SocialLayout" Spacing="14" />
+            </VerticalStackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

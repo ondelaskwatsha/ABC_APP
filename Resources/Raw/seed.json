@@ -1,0 +1,22 @@
+{
+  "name": "Andiswa Business Consultation",
+  "tagline": "WE DESIGN. YOU GROW.",
+  "heroText": "Andiswa Business Consultation crafts bold visual identities and digital experiences that make South African businesses impossible to ignore.",
+  "aboutText1": "Andiswa Business Consultation is a Port Elizabeth based creative agency founded on the belief that exceptional design is the single most powerful investment any business can make. We blend strategic thinking with visual craft to build brands that resonate, differentiate, and endure.",
+  "aboutText2": "From early-stage startups defining their first identity to established businesses evolving for new markets, we bring the same level of care, craft, and creative ambition to every brief.",
+  "email": "andiswasbusinessconsultations@outlook.com",
+  "phone": "+27 67 790 4428",
+  "address": "2 Belmont Terrace, Port Elizabeth, 6001",
+  "hours": "Monday – Friday, 08:00 – 18:00",
+  "ownerName": "Andiswa Phewa",
+  "ownerTitle": "Creative Director",
+  "instagramUrl": "",
+  "linkedInUrl": "",
+  "twitterUrl": "",
+  "stats": [
+    { "value": "50+", "label": "Projects Completed" },
+    { "value": "40+", "label": "Happy Clients" },
+    { "value": "5+", "label": "Years Experience" },
+    { "value": "98%", "label": "Client Satisfaction" }
+  ]
+}

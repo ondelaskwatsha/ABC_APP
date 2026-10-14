@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+  HomePage.xaml  -  WHAT the Home page looks like (the layout).
+  The C# file HomePage.xaml.cs decides WHAT DATA goes in it.
+
+  How to read XAML:
+    Each <Tag> is one thing on screen. Things inside a tag sit inside it.
+    VerticalStackLayout   = puts its children one under the other
+    HorizontalStackLayout = puts its children side by side
+    Label = text,  Button = button,  Border = a box with an outline,  Grid = rows and columns
+    {Binding HeroText}    = "show the HeroText value from the data" (set in the C# file)
+    {StaticResource Ink}  = "use the colour called Ink from App.xaml"
+    Padding="24,64,24,52" = space inside: left, top, right, bottom
+
+  The page from top to bottom:
+    1. Light blue hero: tagline, big headline, short text, two buttons
+    2. Message box (only visible when offline or on error)
+    3. Four numbers in a 2 x 2 grid
+    4. "Who we are" section
+-->
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:AndiswaConsultationApp.Controls"
+             x:Class="AndiswaConsultationApp.Pages.HomePage"
+             BackgroundColor="White"
+             Shell.NavBarIsVisible="False">
+
+    <!-- RefreshView: pull the page down to load fresh data from the server -->
+    <RefreshView x:Name="Refresh" RefreshColor="{StaticResource Primary}">
+        <!-- ScrollView: lets the page scroll when it is taller than the screen -->
+        <ScrollView>
+            <VerticalStackLayout Spacing="0">
+
+                <!-- ===== 1. LIGHT BLUE HERO SECTION ===== -->
+                <VerticalStackLayout Padding="24,64,24,52" Spacing="22">
+                    <!-- The background fades from light blue (top left) to almost white (bottom right) -->
+                    <VerticalStackLayout.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="#C4E3F8" Offset="0.0" />
+                            <GradientStop Color="#F3F9FE" Offset="1.0" />
+                        </LinearGradientBrush>
+                    </VerticalStackLayout.Background>
+
+                    <!-- "WE DESIGN. YOU GROW." (comes from the database) -->
+                    <Label Text="{Binding Tagline}" FontSize="12" CharacterSpacing="4"
+                           TextColor="{StaticResource Primary}" />
+
+                    <!-- The big headline, on three lines. The middle word is light blue. -->
+                    <VerticalStackLayout Spacing="-2">
+                        <Label Text="Bringing Your" FontSize="44" FontAttributes="Bold" TextColor="{StaticResource Ink}" />
+                        <Label Text="Creative" FontSize="44" FontAttributes="Bold" TextColor="{StaticResource Sky}" />
+                        <Label Text="Vision to Life" FontSize="44" FontAttributes="Bold" TextColor="{StaticResource Ink}" />
+                    </VerticalStackLayout>
+
+                    <!-- Short description (comes from the database) -->
+                    <Label Text="{Binding HeroText}" FontSize="17" LineHeight="1.45" TextColor="{StaticResource Muted}" />
+
+                    <!-- Clicked="..." runs that method in HomePage.xaml.cs -->
+                    <Button Text="View Portfolio  →" BackgroundColor="{StaticResource Primary}" TextColor="White"
+                            FontAttributes="Bold" FontSize="16" CornerRadius="10" HeightRequest="54"
+                            Margin="0,10,0,0" Clicked="OnViewPortfolioClicked" />
+
+                    <Button Text="Get a Free Quote" BackgroundColor="Transparent" TextColor="{StaticResource Primary}"
+                            BorderColor="{StaticResource Primary}" BorderWidth="2" FontAttributes="Bold" FontSize="16"
+                            CornerRadius="10" HeightRequest="54" Clicked="OnQuoteClicked" />
+                </VerticalStackLayout>
+
+                <!-- ===== 2. MESSAGE BOX (hidden unless offline or something went wrong) ===== -->
+                <controls:ErrorBox x:Name="ErrorBox" />
+
+                <!-- ===== 3. FOUR NUMBERS: two columns ("*,*" = two equal columns).
+                     The boxes are created in HomePage.xaml.cs (BuildStats) because they come from the database. ===== -->
+                <Grid x:Name="StatsGrid" ColumnDefinitions="*,*" BackgroundColor="White" />
+
+                <!-- ===== 4. "WHO WE ARE" SECTION on a soft blue background ===== -->
+                <VerticalStackLayout Padding="24,48,24,56" Spacing="20" BackgroundColor="{StaticResource SkyLight}">
+                    <controls:SectionHeader Tag="WHO WE ARE" TitleMain="A Creative Studio Built on" TitleAccent="Bold Ideas" />
+                    <Label Text="{Binding AboutText1}" FontSize="18" LineHeight="1.5" TextColor="{StaticResource Ink}" />
+                    <Label Text="{Binding AboutText2}" FontSize="15" LineHeight="1.45" TextColor="{StaticResource Muted}" />
+                </VerticalStackLayout>
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </RefreshView>
+</ContentPage>
