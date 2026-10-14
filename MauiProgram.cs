@@ -1,11 +1,4 @@
-// ============================================================================
-// MauiProgram.cs  -  where the APP STARTS
-// ----------------------------------------------------------------------------
-// When the app opens (on Android or Windows), .NET MAUI calls CreateMauiApp().
-// Here we "register" everything the app needs, so that pages can simply ask
-// for it in their constructor. This is called "dependency injection":
-//   HomePage needs an ApiService -> MAUI creates/gives it automatically.
-// ============================================================================
+
 using AndiswaConsultationApp.Pages;
 using AndiswaConsultationApp.Services;
 using Microsoft.Extensions.Logging;

@@ -1,9 +1,4 @@
-// ============================================================================
-// App.xaml.cs  -  the code behind App.xaml
-// ----------------------------------------------------------------------------
-// App.xaml holds the colours and styles (the theme).
-// This file decides what the FIRST screen is: the AppShell (the tab bar).
-// ============================================================================
+
 namespace AndiswaConsultationApp;
 
 public partial class App : Application
