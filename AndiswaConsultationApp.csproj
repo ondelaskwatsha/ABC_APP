@@ -31,9 +31,9 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<!-- App icon and start-up screen (light blue) -->
-		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#4DA6E8" />
-		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#EAF5FD" BaseSize="128,128" />
+		<!-- App icon and start-up screen (navy, same as the website) -->
+		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#1B2A41" />
+		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#1B2A41" BaseSize="128,128" />
 
 		<!-- Images (the tab bar icons live here) -->
 		<MauiImage Include="Resources\Images\*" />

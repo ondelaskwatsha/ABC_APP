@@ -4,7 +4,7 @@
 // HomePage.xaml is the layout. This file:
 //   1. loads the studio information (from the API, or the saved copy when offline)
 //   2. puts it on the screen (BindingContext + the four number boxes)
-//   3. handles the two buttons and pull-to-refresh
+//   3. handles the buttons and pull-to-refresh
 // ============================================================================
 using AndiswaConsultationApp.Models;
 using AndiswaConsultationApp.Services;
@@ -78,6 +78,7 @@ public partial class HomePage : ContentPage
         // After this line, {Binding HeroText} shows studio.HeroText, and so on.
         BindingContext = studio;
         BuildStats(studio.Stats);
+        Footer.ApplyStudio(studio);      // keeps the footer's social links up to date
     }
 
     // Draws the 2 x 2 grid of numbers. We build it in code because the numbers
@@ -94,10 +95,10 @@ public partial class HomePage : ContentPage
             if (i % 2 == 0)
                 StatsGrid.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
 
-            // One box: big blue number with a small label underneath
+            // One box: big navy number with a small label underneath
             var card = new Border
             {
-                Stroke = Color.FromArgb("#CFE6F7"),
+                Stroke = Color.FromArgb("#DDE2E8"),
                 StrokeThickness = 0.5,
                 BackgroundColor = Colors.White,
                 Padding = new Thickness(0, 30),
@@ -112,14 +113,14 @@ public partial class HomePage : ContentPage
                             Text = stats[i].Value,                    // for example "50+"
                             FontSize = 40,
                             FontAttributes = FontAttributes.Bold,
-                            TextColor = Color.FromArgb("#1F7AC2"),
+                            TextColor = Color.FromArgb("#1B2A41"),
                             HorizontalOptions = LayoutOptions.Center
                         },
                         new Label
                         {
                             Text = stats[i].Label,                    // for example "Projects Completed"
                             FontSize = 13,
-                            TextColor = Color.FromArgb("#0F2A3D"),
+                            TextColor = Color.FromArgb("#5B6472"),
                             HorizontalOptions = LayoutOptions.Center
                         }
                     }
@@ -133,9 +134,25 @@ public partial class HomePage : ContentPage
 
     // "View Portfolio" button: jump to the Portfolio tab. "//" means "go to that tab".
     private async void OnViewPortfolioClicked(object? sender, EventArgs e) =>
-        await Shell.Current.GoToAsync("//Portfolio");
+        await AppNavigation.GoToTabAsync("Portfolio");
 
-    // "Get a Free Quote" button: jump to the Contact tab
+    // "Get a Free Quote" buttons: jump to the Contact tab
     private async void OnQuoteClicked(object? sender, EventArgs e) =>
-        await Shell.Current.GoToAsync("//Contact");
+        await AppNavigation.GoToTabAsync("Contact");
+
+    // "Learn More About Us": opens the About page on top of Home (with a back arrow)
+    private async void OnAboutClicked(object? sender, EventArgs e) =>
+        await AppNavigation.OpenPageAsync("about");
+
+    // "View All Services": jump to the Services tab
+    private async void OnServicesClicked(object? sender, EventArgs e) =>
+        await AppNavigation.GoToTabAsync("Services");
+
+    // "View Project": opens the detail page of the featured project
+    private async void OnFeaturedClicked(object? sender, EventArgs e) =>
+        await AppNavigation.OpenProjectAsync(SiteContent.FeaturedProject);
+
+    // "Read More Testimonials": opens the Testimonials page on top of Home
+    private async void OnTestimonialsClicked(object? sender, EventArgs e) =>
+        await AppNavigation.OpenPageAsync("testimonials");
 }

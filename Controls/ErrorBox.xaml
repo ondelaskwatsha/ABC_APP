@@ -4,7 +4,7 @@
 
   Two looks (chosen in ErrorBox.xaml.cs):
     Show(...)      red box with a "Try again" button   = a real problem
-    ShowInfo(...)  light blue box, no button           = just a note, for example "You're offline"
+    ShowInfo(...)  soft navy-grey box, no button        = just a note, for example "You're offline"
 
   IsVisible="False" means it is hidden until a page calls Show or ShowInfo.
   x:Name gives a part a name so the C# code can change it (Box, MessageLabel, RetryButton).
@@ -19,8 +19,8 @@
         <VerticalStackLayout Spacing="12">
             <Label x:Name="MessageLabel" TextColor="#8A1F1F" FontSize="14" />
             <!-- Clicked="OnRetryClicked" runs that method in ErrorBox.xaml.cs when the button is tapped -->
-            <Button x:Name="RetryButton" Text="Try again" BackgroundColor="{StaticResource Primary}" TextColor="White"
-                    CornerRadius="8" HeightRequest="44" Clicked="OnRetryClicked" />
+            <Button x:Name="RetryButton" Text="Try again" BackgroundColor="{StaticResource Navy}" TextColor="White"
+                    CornerRadius="22" HeightRequest="44" Clicked="OnRetryClicked" />
         </VerticalStackLayout>
     </Border>
 </ContentView>

@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!--
-  SectionHeader.xaml  -  a reusable page title.
+  SectionHeader.xaml  -  a reusable page / section title (same look as the website's headings).
 
-  It draws:   a short blue line + a small capital label   (for example  ___ WHO WE ARE)
-              a big dark title
-              a big light blue second line                 (for example  Bold Ideas)
+  It draws:   a small triangle + a small capital label      (for example  ▲ WHO WE ARE)
+              a big title in the main colour
+              a second title line in the accent colour       (for example  Bold Ideas)
 
   Use it on any page like this:
     <controls:SectionHeader Tag="OUR WORK" TitleMain="Projects That" TitleAccent="Make an Impact" />
+
+  On a NAVY background use the light colours:
+    <controls:SectionHeader ... TagColor="{StaticResource SteelLight}"
+                                MainColor="{StaticResource Cream}"
+                                AccentColor="{StaticResource SteelLight}" />
 
   {Binding Tag} means "show the value of the Tag property here".
   BindingContext="{x:Reference root}" tells the bindings to read the properties of THIS control.
@@ -17,18 +22,19 @@
              x:Class="AndiswaConsultationApp.Controls.SectionHeader"
              x:Name="root">
 
-    <VerticalStackLayout Spacing="14" BindingContext="{x:Reference root}">
+    <VerticalStackLayout Spacing="12" BindingContext="{x:Reference root}">
 
-        <!-- Line + small label, side by side -->
-        <HorizontalStackLayout Spacing="12">
-            <BoxView WidthRequest="30" HeightRequest="2" Color="{StaticResource Sky}" VerticalOptions="Center" />
-            <Label Text="{Binding Tag}" FontSize="12" CharacterSpacing="3" TextColor="{StaticResource Primary}" />
+        <!-- Triangle (the website's logo shape) + small label, side by side -->
+        <HorizontalStackLayout Spacing="10">
+            <Label Text="▲" FontSize="10" TextColor="{Binding TagColor}" VerticalOptions="Center" />
+            <Label Text="{Binding Tag}" FontSize="12" CharacterSpacing="3" FontAttributes="Bold"
+                   TextColor="{Binding TagColor}" VerticalOptions="Center" />
         </HorizontalStackLayout>
 
-        <!-- Big title: first part dark, second part light blue (hidden when empty) -->
+        <!-- Big title: first part in the main colour, second part in the accent colour (hidden when empty) -->
         <VerticalStackLayout Spacing="0">
-            <Label Text="{Binding TitleMain}" FontSize="32" FontAttributes="Bold" TextColor="{StaticResource Ink}" />
-            <Label Text="{Binding TitleAccent}" FontSize="32" FontAttributes="Bold" TextColor="{StaticResource Sky}"
+            <Label Text="{Binding TitleMain}" FontSize="30" FontAttributes="Bold" TextColor="{Binding MainColor}" />
+            <Label Text="{Binding TitleAccent}" FontSize="30" FontAttributes="Bold" TextColor="{Binding AccentColor}"
                    IsVisible="{Binding HasAccent}" />
         </VerticalStackLayout>
 

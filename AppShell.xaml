@@ -1,16 +1,28 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!--
-  AppShell.xaml  -  the bottom TAB BAR of the app.
+  AppShell.xaml  -  the NAVIGATION of the app.
 
-  A Shell is the "frame" around all pages. Here it shows 5 tabs at the bottom.
+  A Shell is the "frame" around all pages. It has two kinds of destinations:
+
+  1) THE TAB BAR (the 5 main screens, always one tap away):
+        Home  -  Services  -  Portfolio  -  Contact  -  More
+     "More" is a menu that leads to the other website pages: About Us, Team and Testimonials.
+
+  2) PAGES OPENED ON TOP (they get a back arrow): About, Team, Testimonials and a project's detail page.
+     They are registered by name in AppShell.xaml.cs.
+
+  Every page of the website is in the app:
+     Home, About Us, Services, Projects (= Portfolio), Team, Testimonials, Contact.
+
   Each ShellContent is one tab:
     Title           = the text under the icon
     Icon            = the picture (files in Resources/Images, .svg is turned into .png automatically)
     Route           = the tab's name, used to jump to it from code, for example GoToAsync("//Contact")
     ContentTemplate = which page to show
 
-  The Shell.* settings below set the tab bar colours (light blue when selected, grey when not).
-  NavBarIsVisible="False" hides the title bar at the top, because our pages have their own big titles.
+  The Shell.* settings below set the colours (navy when selected, grey when not).
+  NavBarIsVisible="False" hides the title bar at the top, because the tab pages have their own big titles.
+  (The pages that open on top switch the title bar back on, so they show the back arrow.)
 -->
 <Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
@@ -19,23 +31,23 @@
        Shell.FlyoutBehavior="Disabled"
        Shell.NavBarIsVisible="False"
        Shell.BackgroundColor="White"
+       Shell.ForegroundColor="#1B2A41"
+       Shell.TitleColor="#1B2A41"
        Shell.TabBarBackgroundColor="White"
-       Shell.TabBarForegroundColor="#1F7AC2"
-       Shell.TabBarTitleColor="#1F7AC2"
-       Shell.TabBarUnselectedColor="#7C97AB">
+       Shell.TabBarForegroundColor="#1B2A41"
+       Shell.TabBarTitleColor="#1B2A41"
+       Shell.TabBarUnselectedColor="#8891A0">
 
-    <!-- Home and Contact are finished.
-         About, Services and Portfolio are empty pages for teammates to build. -->
     <TabBar>
         <ShellContent Title="Home" Icon="tab_home.png" Route="Home"
                       ContentTemplate="{DataTemplate pages:HomePage}" />
-        <ShellContent Title="About" Icon="tab_about.png" Route="About"
-                      ContentTemplate="{DataTemplate pages:AboutPage}" />
         <ShellContent Title="Services" Icon="tab_services.png" Route="Services"
                       ContentTemplate="{DataTemplate pages:ServicesPage}" />
         <ShellContent Title="Portfolio" Icon="tab_portfolio.png" Route="Portfolio"
                       ContentTemplate="{DataTemplate pages:PortfolioPage}" />
         <ShellContent Title="Contact" Icon="tab_contact.png" Route="Contact"
                       ContentTemplate="{DataTemplate pages:ContactPage}" />
+        <ShellContent Title="More" Icon="tab_more.png" Route="More"
+                      ContentTemplate="{DataTemplate pages:MorePage}" />
     </TabBar>
 </Shell>

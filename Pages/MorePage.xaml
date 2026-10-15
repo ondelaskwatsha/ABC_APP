@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+  MorePage.xaml  -  the "More" tab: a menu to the website pages that are not in the tab bar.
+
+  Tap a row to open About Us, Team or Testimonials. They open on top of this page with a back arrow.
+  The rows come from SiteContent.MoreLinks (Models/Models.cs).
+-->
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:AndiswaConsultationApp.Controls"
+             xmlns:models="clr-namespace:AndiswaConsultationApp.Models"
+             x:Class="AndiswaConsultationApp.Pages.MorePage"
+             BackgroundColor="{StaticResource Cream}"
+             Shell.NavBarIsVisible="False">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="0">
+
+            <VerticalStackLayout Padding="24,56,24,24" Spacing="18">
+                <controls:SectionHeader Tag="MORE" TitleMain="Explore the" TitleAccent="Studio" />
+
+                <!-- The studio logo on a black tile (the logo picture has a black background) -->
+                <Border BackgroundColor="Black" StrokeThickness="0" StrokeShape="RoundRectangle 18" Margin="0,6,0,0">
+                    <Image Source="ab_logo.jpg" Aspect="AspectFit" HeightRequest="170" />
+                </Border>
+            </VerticalStackLayout>
+
+            <!-- One row for every link -->
+            <VerticalStackLayout Padding="24,0,24,48" Spacing="12"
+                                 BindableLayout.ItemsSource="{x:Static models:SiteContent.MoreLinks}">
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate>
+                        <Border Style="{StaticResource Card}" Padding="16">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnLinkTapped" />
+                            </Border.GestureRecognizers>
+                            <Grid ColumnDefinitions="52,*,Auto" ColumnSpacing="14">
+                                <Border BackgroundColor="{StaticResource Mist}" StrokeThickness="0"
+                                        StrokeShape="RoundRectangle 26" WidthRequest="52" HeightRequest="52">
+                                    <Image Source="{Binding Icon}" WidthRequest="24" HeightRequest="24"
+                                           HorizontalOptions="Center" VerticalOptions="Center" />
+                                </Border>
+                                <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
+                                    <Label Text="{Binding Title}" FontSize="17" FontAttributes="Bold" TextColor="{StaticResource Navy}" />
+                                    <Label Text="{Binding Subtitle}" FontSize="13" TextColor="{StaticResource Muted}" />
+                                </VerticalStackLayout>
+                                <Label Grid.Column="2" Text="›" FontSize="28" TextColor="{StaticResource Soft}"
+                                       VerticalOptions="Center" />
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+            </VerticalStackLayout>
+
+            <controls:SiteFooter />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  NewsletterBox.xaml  -  the "Design Inspiration, Delivered Weekly" sign-up box
+  (it is on the website's About and Services pages, so it is a shared control here).
+-->
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:AndiswaConsultationApp.Models"
+             x:Class="AndiswaConsultationApp.Controls.NewsletterBox">
+
+    <VerticalStackLayout BackgroundColor="{StaticResource Navy}" Padding="24,48,24,52" Spacing="16">
+
+        <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+            <Label Text="▲" FontSize="10" TextColor="{StaticResource SteelLight}" VerticalOptions="Center" />
+            <Label Text="NEWSLETTER" FontSize="12" CharacterSpacing="3" FontAttributes="Bold"
+                   TextColor="{StaticResource SteelLight}" VerticalOptions="Center" />
+        </HorizontalStackLayout>
+
+        <Label Text="{x:Static models:SiteContent.NewsletterTitle}" FontSize="26" FontAttributes="Bold"
+               TextColor="White" HorizontalTextAlignment="Center" />
+
+        <Label Text="{x:Static models:SiteContent.NewsletterText}" FontSize="15" LineHeight="1.45"
+               TextColor="{StaticResource OnDarkMuted}" HorizontalTextAlignment="Center" />
+
+        <Border BackgroundColor="White" StrokeThickness="0" StrokeShape="RoundRectangle 26" Padding="20,0" Margin="0,8,0,0">
+            <Entry x:Name="EmailEntry" Placeholder="your@email.com" Keyboard="Email" FontSize="16"
+                   TextColor="{StaticResource Ink}" PlaceholderColor="{StaticResource Soft}"
+                   BackgroundColor="Transparent" HeightRequest="52" />
+        </Border>
+
+        <Button Text="Subscribe Free" Style="{StaticResource LightButton}" Clicked="OnSubscribeClicked" />
+
+    </VerticalStackLayout>
+</ContentView>

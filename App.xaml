@@ -2,8 +2,9 @@
 <!--
   App.xaml  -  the THEME of the whole app (colours and styles).
 
-  Anything defined here can be used on every page with {StaticResource Name}.
-  Example:  TextColor="{StaticResource Primary}"
+  These are the SAME colours as the website (index.html / nav-unified.css), so the app and the
+  website look like one brand. Anything defined here can be used on every page with
+  {StaticResource Name}.   Example:  TextColor="{StaticResource Navy}"
   If you change a colour here, it changes on every page at once.
 -->
 <Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
@@ -12,23 +13,82 @@
     <Application.Resources>
         <ResourceDictionary>
 
-            <!-- THE LIGHT BLUE THEME. Everyone on the team: use these colours so all pages match. -->
-            <Color x:Key="Primary">#1F7AC2</Color>       <!-- buttons, links, highlights (dark enough for white text) -->
-            <Color x:Key="Sky">#4DA6E8</Color>           <!-- light blue accents -->
-            <Color x:Key="SkyLight">#EAF5FD</Color>      <!-- very soft blue backgrounds and cards -->
-            <Color x:Key="SkyBorder">#CFE6F7</Color>     <!-- thin outlines -->
-            <Color x:Key="Ink">#0F2A3D</Color>           <!-- main text (dark navy) -->
-            <Color x:Key="Muted">#4A6A82</Color>         <!-- smaller grey-blue text -->
+            <!-- ============ THE NAVY THEME (same values as the website) ============ -->
+            <Color x:Key="Navy">#1B2A41</Color>         <!-- website "espresso": header, buttons, main headings -->
+            <Color x:Key="NavyDeep">#101B2B</Color>     <!-- website footer background -->
+            <Color x:Key="NavySoft">#24384F</Color>     <!-- cards on a navy background -->
+            <Color x:Key="Steel">#3E6690</Color>        <!-- website "tan": accents, labels, links -->
+            <Color x:Key="SteelLight">#5B8DB8</Color>   <!-- website "tan-bright": highlights on navy -->
+            <Color x:Key="Cream">#F7F8FA</Color>        <!-- website page background / text on navy -->
+            <Color x:Key="Mist">#EEF1F4</Color>         <!-- soft grey-blue section background -->
+            <Color x:Key="Ink">#232830</Color>          <!-- main text -->
+            <Color x:Key="Muted">#5B6472</Color>        <!-- smaller grey text -->
+            <Color x:Key="Soft">#8891A0</Color>         <!-- placeholder / unselected text -->
+            <Color x:Key="Line">#DDE2E8</Color>         <!-- thin outlines on light backgrounds -->
+            <Color x:Key="OnDarkMuted">#B9C4D2</Color>  <!-- paragraph text on a navy background -->
 
             <!--
-              A Style is a reusable set of settings.
-              Instead of repeating 5 settings on every form field, we write them once here
-              and use Style="{StaticResource FieldBorder}" on the page.
+              A Style is a reusable set of settings. Instead of repeating the same
+              settings on every button, we write them once here and use
+              Style="{StaticResource PrimaryButton}" on the page.
             -->
+
+            <!-- Main button: navy pill with white text (on light backgrounds) -->
+            <Style x:Key="PrimaryButton" TargetType="Button">
+                <Setter Property="BackgroundColor" Value="{StaticResource Navy}" />
+                <Setter Property="TextColor" Value="White" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="FontSize" Value="15" />
+                <Setter Property="CornerRadius" Value="26" />
+                <Setter Property="HeightRequest" Value="52" />
+            </Style>
+
+            <!-- Secondary button: navy outline (on light backgrounds) -->
+            <Style x:Key="OutlineButton" TargetType="Button">
+                <Setter Property="BackgroundColor" Value="Transparent" />
+                <Setter Property="TextColor" Value="{StaticResource Navy}" />
+                <Setter Property="BorderColor" Value="{StaticResource Navy}" />
+                <Setter Property="BorderWidth" Value="1.5" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="FontSize" Value="15" />
+                <Setter Property="CornerRadius" Value="26" />
+                <Setter Property="HeightRequest" Value="52" />
+            </Style>
+
+            <!-- Main button on a NAVY background: light pill with navy text (like the website hero) -->
+            <Style x:Key="LightButton" TargetType="Button">
+                <Setter Property="BackgroundColor" Value="{StaticResource Cream}" />
+                <Setter Property="TextColor" Value="{StaticResource Navy}" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="FontSize" Value="15" />
+                <Setter Property="CornerRadius" Value="26" />
+                <Setter Property="HeightRequest" Value="52" />
+            </Style>
+
+            <!-- Secondary button on a NAVY background: light outline -->
+            <Style x:Key="LightOutlineButton" TargetType="Button">
+                <Setter Property="BackgroundColor" Value="Transparent" />
+                <Setter Property="TextColor" Value="{StaticResource Cream}" />
+                <Setter Property="BorderColor" Value="#8FA3BA" />
+                <Setter Property="BorderWidth" Value="1.5" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="FontSize" Value="15" />
+                <Setter Property="CornerRadius" Value="26" />
+                <Setter Property="HeightRequest" Value="52" />
+            </Style>
+
+            <!-- A white card with a thin outline and rounded corners -->
+            <Style x:Key="Card" TargetType="Border">
+                <Setter Property="BackgroundColor" Value="White" />
+                <Setter Property="Stroke" Value="{StaticResource Line}" />
+                <Setter Property="StrokeThickness" Value="1" />
+                <Setter Property="StrokeShape" Value="RoundRectangle 16" />
+                <Setter Property="Padding" Value="20" />
+            </Style>
 
             <!-- Rounded outline around each form field on the Contact page -->
             <Style x:Key="FieldBorder" TargetType="Border">
-                <Setter Property="Stroke" Value="{StaticResource SkyBorder}" />
+                <Setter Property="Stroke" Value="{StaticResource Line}" />
                 <Setter Property="StrokeThickness" Value="1.5" />
                 <Setter Property="StrokeShape" Value="RoundRectangle 12" />
                 <Setter Property="Padding" Value="14,0" />
@@ -39,7 +99,7 @@
             <Style x:Key="FieldEntry" TargetType="Entry">
                 <Setter Property="FontSize" Value="16" />
                 <Setter Property="TextColor" Value="{StaticResource Ink}" />
-                <Setter Property="PlaceholderColor" Value="#8AA4B8" />
+                <Setter Property="PlaceholderColor" Value="{StaticResource Soft}" />
                 <Setter Property="BackgroundColor" Value="Transparent" />
                 <Setter Property="HeightRequest" Value="52" />
             </Style>

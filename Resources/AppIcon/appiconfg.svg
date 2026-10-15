@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <svg xmlns="http://www.w3.org/2000/svg" width="456" height="456" viewBox="0 0 456 456" version="1.1">
-    <!-- A simple white "A" shape -->
-    <path d="M228 108 L330 348 L288 348 L228 200 L168 348 L126 348 Z" fill="#FFFFFF" />
-    <rect x="178" y="270" width="100" height="30" rx="6" fill="#FFFFFF" />
+    <!-- "A|B" monogram in white -->
+    <g fill="none" stroke="#FFFFFF" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" transform="translate(-15,-17)"><path d="M120 320 L170 168 L220 320"/><path d="M140 270 H200"/><path d="M258 150 V340"/><path d="M296 168 V320 M296 168 H322 a36 36 0 0 1 0 72 H296 M296 240 H330 a40 40 0 0 1 0 80 H296"/></g>
 </svg>

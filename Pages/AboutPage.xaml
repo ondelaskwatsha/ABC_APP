@@ -1,15 +1,105 @@
 <?xml version="1.0" encoding="utf-8" ?>
+<!--
+  AboutPage.xaml  -  the About Us page (same content as about.html on the website).
+
+  It opens ON TOP of another page (from "More" or the Home page), so the title bar is switched on:
+  that gives the back arrow at the top left.
+
+  From top to bottom:
+    1. Studio photo with the "Award-Winning Studio" badge and the "5+ Years" box
+    2. "Who we are" (the two paragraphs come from the database)
+    3. Mission and Vision
+    4. Our values
+    5. Meet the team
+    6. Newsletter sign-up and footer
+-->
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:AndiswaConsultationApp.Controls"
+             xmlns:models="clr-namespace:AndiswaConsultationApp.Models"
              x:Class="AndiswaConsultationApp.Pages.AboutPage"
-             BackgroundColor="White"
-             Shell.NavBarIsVisible="False">
+             Title="About Us"
+             BackgroundColor="{StaticResource Cream}"
+             Shell.NavBarIsVisible="True">
 
     <ScrollView>
-        <VerticalStackLayout Padding="24,56,24,40" Spacing="20">
-            <controls:SectionHeader Tag="WHO WE ARE" TitleMain="About Us" TitleAccent="Coming soon" />
-            <Label Text="This page is being built by a team member." FontSize="16" TextColor="{StaticResource Muted}" />
+        <VerticalStackLayout Spacing="0">
+
+            <!-- ===== 1. PHOTO. A Grid puts its children on top of each other, so the badge and the box sit ON the photo. ===== -->
+            <Grid HeightRequest="260" BackgroundColor="{StaticResource Navy}">
+                <Image Source="andiswa_branding.jpg" Aspect="AspectFill" />
+
+                <Border BackgroundColor="{StaticResource Navy}" StrokeThickness="0" StrokeShape="RoundRectangle 18"
+                        Padding="14,7" HorizontalOptions="Start" VerticalOptions="Start" Margin="16">
+                    <Label Text="★  Award-Winning Studio" FontSize="12" FontAttributes="Bold" TextColor="White" />
+                </Border>
+
+                <Border BackgroundColor="White" StrokeThickness="0" StrokeShape="RoundRectangle 12"
+                        Padding="16,10" HorizontalOptions="End" VerticalOptions="End" Margin="16">
+                    <VerticalStackLayout Spacing="0">
+                        <Label Text="5+" FontSize="30" FontAttributes="Bold" TextColor="{StaticResource Navy}" />
+                        <Label Text="Years of Design Excellence" FontSize="12" TextColor="{StaticResource Muted}" />
+                    </VerticalStackLayout>
+                </Border>
+            </Grid>
+
+            <!-- ===== 2. WHO WE ARE ===== -->
+            <VerticalStackLayout Padding="24,44,24,16" Spacing="20">
+                <controls:SectionHeader Tag="WHO WE ARE" TitleMain="A Creative Studio Built on" TitleAccent="Bold Ideas" />
+                <Label Text="{Binding AboutText1}" FontSize="17" LineHeight="1.5" TextColor="{StaticResource Ink}" />
+                <Label Text="{Binding AboutText2}" FontSize="15" LineHeight="1.45" TextColor="{StaticResource Muted}" />
+            </VerticalStackLayout>
+
+            <!-- ===== 3. MISSION AND VISION ===== -->
+            <VerticalStackLayout Padding="24,8,24,16" Spacing="14">
+                <Border Style="{StaticResource Card}">
+                    <VerticalStackLayout Spacing="8">
+                        <HorizontalStackLayout Spacing="8">
+                            <Label Text="▲" FontSize="10" TextColor="{StaticResource Steel}" VerticalOptions="Center" />
+                            <Label Text="OUR MISSION" FontSize="12" CharacterSpacing="3" FontAttributes="Bold"
+                                   TextColor="{StaticResource Steel}" VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+                        <Label Text="{x:Static models:SiteContent.Mission}" FontSize="18" FontAttributes="Bold"
+                               LineHeight="1.35" TextColor="{StaticResource Navy}" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border Style="{StaticResource Card}">
+                    <VerticalStackLayout Spacing="8">
+                        <HorizontalStackLayout Spacing="8">
+                            <Label Text="▲" FontSize="10" TextColor="{StaticResource Steel}" VerticalOptions="Center" />
+                            <Label Text="OUR VISION" FontSize="12" CharacterSpacing="3" FontAttributes="Bold"
+                                   TextColor="{StaticResource Steel}" VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+                        <Label Text="{x:Static models:SiteContent.Vision}" FontSize="18" FontAttributes="Bold"
+                               LineHeight="1.35" TextColor="{StaticResource Navy}" />
+                    </VerticalStackLayout>
+                </Border>
+            </VerticalStackLayout>
+
+            <!-- ===== 4. OUR VALUES: a FlexLayout wraps to a new line when the row is full ===== -->
+            <FlexLayout Wrap="Wrap" Direction="Row" Padding="24,10,24,24"
+                        BindableLayout.ItemsSource="{x:Static models:SiteContent.Values}">
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate>
+                        <Border BackgroundColor="White" Stroke="{StaticResource Line}" StrokeThickness="1"
+                                StrokeShape="RoundRectangle 20" Padding="16,9" Margin="0,0,8,8">
+                            <Label Text="{Binding .}" FontSize="13" FontAttributes="Bold" TextColor="{StaticResource Navy}" />
+                        </Border>
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+            </FlexLayout>
+
+            <!-- ===== 5. MEET THE TEAM ===== -->
+            <VerticalStackLayout Padding="24,36,24,48" Spacing="16" BackgroundColor="{StaticResource Mist}">
+                <controls:SectionHeader Tag="THE TEAM" TitleMain="The people behind" TitleAccent="every brand we build." />
+                <Button Text="Meet the Team  →" Style="{StaticResource PrimaryButton}" Clicked="OnTeamClicked" />
+            </VerticalStackLayout>
+
+            <!-- ===== 6. NEWSLETTER AND FOOTER ===== -->
+            <controls:NewsletterBox />
+            <controls:SiteFooter />
+
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

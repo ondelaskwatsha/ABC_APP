@@ -88,6 +88,7 @@ public class ApiService
             // Save a copy on the phone for next time we are offline
             await File.WriteAllTextAsync(StudioCachePath, JsonSerializer.Serialize(fresh, JsonOpts));
             _studio = fresh;
+            AppState.Studio = fresh;          // the footer on every page reads this
             UsingOfflineData = false;
 
             // We are online, so try to send any waiting messages in the background.
@@ -100,6 +101,7 @@ public class ApiService
         {
             UsingOfflineData = true;
             _studio = await GetSavedStudioAsync();
+            AppState.Studio = _studio;
             return _studio;
         }
     }

@@ -20,11 +20,18 @@ public static class MauiProgram
 
         // AddTransient = a fresh page is created when it is needed.
         // TEAM NOTE: every page must be registered here. If you add a new page, add a line.
+        // The five tabs:
         builder.Services.AddTransient<HomePage>();
-        builder.Services.AddTransient<AboutPage>();
         builder.Services.AddTransient<ServicesPage>();
         builder.Services.AddTransient<PortfolioPage>();
         builder.Services.AddTransient<ContactPage>();
+        builder.Services.AddTransient<MorePage>();
+
+        // The pages that open on top of a tab (registered by name in AppShell.xaml.cs):
+        builder.Services.AddTransient<AboutPage>();
+        builder.Services.AddTransient<TeamPage>();
+        builder.Services.AddTransient<TestimonialsPage>();
+        builder.Services.AddTransient<ProjectDetailPage>();
 
 #if DEBUG
         // While you are testing (Debug mode), show log messages in Visual Studio's Output window

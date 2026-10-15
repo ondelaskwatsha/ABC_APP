@@ -8,6 +8,8 @@
 //      -> the API saves it in the website's quotes table
 //      -> the admin sees it in admin.php under "Quote Requests"
 //   4. when there is no internet, the message is saved on the phone and sent later
+//   5. builds the "Quick answers" questions (the same answers as the website's chat assistant)
+//   6. selects the service in the drop-down when you arrive from the Services page or a project
 // ============================================================================
 using System.Net.Mail;
 using AndiswaConsultationApp.Models;
@@ -39,12 +41,20 @@ public partial class ContactPage : ContentPage
 
         ServicePicker.ItemsSource = Services;                          // fill the drop-down
         ErrorBox.Retry += async (_, _) => await LoadStudioAsync();     // "Try again" button
+        BuildFaq();                                                    // the "Quick answers" questions
     }
 
     // Runs every time the Contact tab comes on screen
     protected override async void OnAppearing()
     {
         base.OnAppearing();
+
+        // Did the user arrive by tapping "Request this service" on another page? Select that service.
+        if (AppState.PendingService is { } wanted)
+        {
+            ServicePicker.SelectedItem = Services.Contains(wanted) ? wanted : "Other";
+            AppState.PendingService = null;     // use it only once
+        }
 
         // Try to send any messages that were saved while the phone was offline.
         // "_ =" means "start it but don't wait for it".
@@ -81,56 +91,77 @@ public partial class ContactPage : ContentPage
     {
         _studio = studio;
         BindingContext = studio;
-        BuildSocialButtons(studio);
+        Footer.ApplyStudio(studio);     // the footer shows the social media buttons
     }
 
-    // Creates a round button for each social media link that exists
-    private void BuildSocialButtons(StudioInfo studio)
+    // Creates the "Quick answers": tap a question to open or close its answer
+    private void BuildFaq()
     {
-        SocialLayout.Children.Clear();
+        FaqLayout.Children.Clear();
 
-        AddSocial("IG", studio.InstagramUrl);
-        AddSocial("in", studio.LinkedInUrl);
-        AddSocial("X", studio.TwitterUrl);
-
-        // Only show the "FOLLOW US" section if at least one button was added
-        SocialSection.IsVisible = SocialLayout.Children.Count > 0;
-    }
-
-    private void AddSocial(string text, string url)
-    {
-        if (string.IsNullOrWhiteSpace(url))
-            return;                     // no link in the database = no button
-
-        // A 60 x 60 box with corners of 30 = a circle
-        var circle = new Border
+        foreach (var item in SiteContent.Faq)
         {
-            BackgroundColor = Color.FromArgb("#EAF5FD"),
-            Stroke = Color.FromArgb("#CFE6F7"),
-            StrokeThickness = 1,
-            StrokeShape = new RoundRectangle { CornerRadius = 30 },
-            WidthRequest = 60,
-            HeightRequest = 60,
-            Content = new Label
+            var sign = new Label
             {
-                Text = text,
-                FontSize = 18,
-                FontAttributes = FontAttributes.Bold,
-                TextColor = Color.FromArgb("#1F7AC2"),
-                HorizontalOptions = LayoutOptions.Center,
+                Text = "+",
+                FontSize = 22,
+                TextColor = Color.FromArgb("#3E6690"),
                 VerticalOptions = LayoutOptions.Center
-            }
-        };
+            };
 
-        // When tapped, open the link in the browser (or the Instagram/LinkedIn app)
-        var tap = new TapGestureRecognizer();
-        tap.Tapped += async (_, _) =>
-        {
-            try { await Launcher.OpenAsync(new Uri(url)); } catch { }
-        };
-        circle.GestureRecognizers.Add(tap);
+            var question = new Label
+            {
+                Text = item.Question,
+                FontSize = 15,
+                FontAttributes = FontAttributes.Bold,
+                TextColor = Color.FromArgb("#1B2A41"),
+                VerticalOptions = LayoutOptions.Center
+            };
 
-        SocialLayout.Children.Add(circle);
+            // The answer is hidden until the question is tapped
+            var answer = new Label
+            {
+                Text = item.Answer,
+                FontSize = 14,
+                LineHeight = 1.45,
+                TextColor = Color.FromArgb("#5B6472"),
+                IsVisible = false,
+                Margin = new Thickness(0, 10, 0, 0)
+            };
+
+            // The question on the left, the + / - sign on the right
+            var row = new Grid
+            {
+                ColumnDefinitions =
+                {
+                    new ColumnDefinition(GridLength.Star),
+                    new ColumnDefinition(GridLength.Auto)
+                },
+                ColumnSpacing = 10
+            };
+            row.Add(question, 0, 0);
+            row.Add(sign, 1, 0);
+
+            var card = new Border
+            {
+                BackgroundColor = Colors.White,
+                Stroke = Color.FromArgb("#DDE2E8"),
+                StrokeThickness = 1,
+                StrokeShape = new RoundRectangle { CornerRadius = 14 },
+                Padding = new Thickness(16, 14),
+                Content = new VerticalStackLayout { Children = { row, answer } }
+            };
+
+            var tap = new TapGestureRecognizer();
+            tap.Tapped += (_, _) =>
+            {
+                answer.IsVisible = !answer.IsVisible;
+                sign.Text = answer.IsVisible ? "–" : "+";
+            };
+            card.GestureRecognizers.Add(tap);
+
+            FaqLayout.Children.Add(card);
+        }
     }
 
     // Runs when "Send Message" is tapped

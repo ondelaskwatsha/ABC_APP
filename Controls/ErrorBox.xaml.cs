@@ -3,7 +3,7 @@
 // ----------------------------------------------------------------------------
 // Pages use it like this:
 //   ErrorBox.Show("Could not reach the server");       -> red box + Try again
-//   ErrorBox.ShowInfo("You're offline ...");          -> light blue note
+//   ErrorBox.ShowInfo("You're offline ...");          -> soft navy-grey note
 //   ErrorBox.Hide();                                   -> hide it
 //   ErrorBox.Retry += ...                              -> what to do when Try again is tapped
 // ============================================================================
@@ -30,12 +30,12 @@ public partial class ErrorBox : ContentView
         IsVisible = true;
     }
 
-    // Just a friendly note, for example "you are offline" (light blue box, no button)
+    // Just a friendly note, for example "you are offline" (soft navy-grey box, no button)
     public void ShowInfo(string message)
     {
-        Box.BackgroundColor = Color.FromArgb("#EAF5FD");
-        Box.Stroke = Color.FromArgb("#CFE6F7");
-        MessageLabel.TextColor = Color.FromArgb("#0F2A3D");
+        Box.BackgroundColor = Color.FromArgb("#EEF1F4");
+        Box.Stroke = Color.FromArgb("#DDE2E8");
+        MessageLabel.TextColor = Color.FromArgb("#1B2A41");
         MessageLabel.Text = message;
         RetryButton.IsVisible = false;
         IsVisible = true;
