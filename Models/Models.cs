@@ -8,11 +8,6 @@ public class StatItem
     public string Label { get; set; } = "";
 }
 
-/// <summary>
-/// Everything the Home and Contact pages show.
-/// It comes from the API (GET /api/studio), which reads the website's "settings" table.
-/// = "" means "start as empty text" so the page never crashes on a missing value.
-/// </summary>
 public class StudioInfo
 {
     public string Name { get; set; } = "";
