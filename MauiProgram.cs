@@ -1,4 +1,3 @@
-
 using AndiswaConsultationApp.Pages;
 using AndiswaConsultationApp.Services;
 using Microsoft.Extensions.Logging;
@@ -11,15 +10,19 @@ public static class MauiProgram
     {
         var builder = MauiApp.CreateBuilder();
 
-        // Use our App class (App.xaml) as the starting point
-        builder.UseMauiApp<App>();
+        // ConfigureFonts registers the fonts that Settings > Font style can choose.
+        // The .ttf files must be in Resources/Fonts.
+        builder
+            .UseMauiApp<App>()
+            .ConfigureFonts(fonts =>
+            {
+                fonts.AddFont("OpenSans-Regular.ttf", "OpenSans");
+                fonts.AddFont("Lora-Regular.ttf", "Lora");
+                fonts.AddFont("RobotoMono-Regular.ttf", "RobotoMono");
+            });
 
-        // AddSingleton = ONE ApiService for the whole app, shared by every page.
-        // That way Home and Contact share the data they downloaded.
         builder.Services.AddSingleton<ApiService>();
 
-        // AddTransient = a fresh page is created when it is needed.
-        // TEAM NOTE: every page must be registered here. If you add a new page, add a line.
         // The five tabs:
         builder.Services.AddTransient<HomePage>();
         builder.Services.AddTransient<ServicesPage>();
@@ -27,14 +30,15 @@ public static class MauiProgram
         builder.Services.AddTransient<ContactPage>();
         builder.Services.AddTransient<MorePage>();
 
-        // The pages that open on top of a tab (registered by name in AppShell.xaml.cs):
+        // The pages that open on top of a tab:
         builder.Services.AddTransient<AboutPage>();
         builder.Services.AddTransient<TeamPage>();
         builder.Services.AddTransient<TestimonialsPage>();
         builder.Services.AddTransient<ProjectDetailPage>();
+        builder.Services.AddTransient<SettingsPage>();
+
 
 #if DEBUG
-        // While you are testing (Debug mode), show log messages in Visual Studio's Output window
         builder.Logging.AddDebug();
 #endif
 

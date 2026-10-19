@@ -1,28 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!--
-  AppShell.xaml  -  the NAVIGATION of the app.
-
-  A Shell is the "frame" around all pages. It has two kinds of destinations:
-
-  1) THE TAB BAR (the 5 main screens, always one tap away):
-        Home  -  Services  -  Portfolio  -  Contact  -  More
-     "More" is a menu that leads to the other website pages: About Us, Team and Testimonials.
-
-  2) PAGES OPENED ON TOP (they get a back arrow): About, Team, Testimonials and a project's detail page.
-     They are registered by name in AppShell.xaml.cs.
-
-  Every page of the website is in the app:
-     Home, About Us, Services, Projects (= Portfolio), Team, Testimonials, Contact.
-
-  Each ShellContent is one tab:
-    Title           = the text under the icon
-    Icon            = the picture (files in Resources/Images, .svg is turned into .png automatically)
-    Route           = the tab's name, used to jump to it from code, for example GoToAsync("//Contact")
-    ContentTemplate = which page to show
-
-  The Shell.* settings below set the colours (navy when selected, grey when not).
-  NavBarIsVisible="False" hides the title bar at the top, because the tab pages have their own big titles.
-  (The pages that open on top switch the title bar back on, so they show the back arrow.)
+  AppShell.xaml  -  the NAVIGATION of the app: 5 tabs (Home, Services, Portfolio, Contact, More).
+  Pages opened on top (About, Team, Testimonials, Settings, project detail) are registered in AppShell.xaml.cs.
+  The Shell.* colours use {DynamicResource ...} so they follow dark / light mode.
 -->
 <Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
@@ -30,13 +10,13 @@
        x:Class="AndiswaConsultationApp.AppShell"
        Shell.FlyoutBehavior="Disabled"
        Shell.NavBarIsVisible="False"
-       Shell.BackgroundColor="White"
-       Shell.ForegroundColor="#1B2A41"
-       Shell.TitleColor="#1B2A41"
-       Shell.TabBarBackgroundColor="White"
-       Shell.TabBarForegroundColor="#1B2A41"
-       Shell.TabBarTitleColor="#1B2A41"
-       Shell.TabBarUnselectedColor="#8891A0">
+       Shell.BackgroundColor="{DynamicResource Surface}"
+       Shell.ForegroundColor="{DynamicResource Navy}"
+       Shell.TitleColor="{DynamicResource Navy}"
+       Shell.TabBarBackgroundColor="{DynamicResource Surface}"
+       Shell.TabBarForegroundColor="{DynamicResource Navy}"
+       Shell.TabBarTitleColor="{DynamicResource Navy}"
+       Shell.TabBarUnselectedColor="{DynamicResource Soft}">
 
     <TabBar>
         <ShellContent Title="Home" Icon="tab_home.png" Route="Home"

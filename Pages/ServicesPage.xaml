@@ -1,23 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<!--
-  ServicesPage.xaml  -  the Services page (same content as services.html on the website).
-
-  From top to bottom:
-    1. Title
-    2. The ten services. Tap one to go to the Contact form with that service already chosen.
-    3. "Why Clients Choose Andiswa Business Consultation" (six reasons, on a navy background)
-    4. Newsletter sign-up
-    5. Footer
-
-  The words come from SiteContent (Models/Models.cs). BindableLayout.ItemsSource = "make one card
-  for every item in the list", and {Binding Title} reads that item's Title.
--->
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:AndiswaConsultationApp.Controls"
              xmlns:models="clr-namespace:AndiswaConsultationApp.Models"
              x:Class="AndiswaConsultationApp.Pages.ServicesPage"
-             BackgroundColor="{StaticResource Cream}"
+             BackgroundColor="{DynamicResource PageBg}"
              Shell.NavBarIsVisible="False">
 
     <ScrollView>
@@ -27,7 +14,7 @@
             <VerticalStackLayout Padding="24,56,24,24" Spacing="12">
                 <controls:SectionHeader Tag="WHAT WE CREATE" TitleMain="Design Services That" TitleAccent="Move Brands Forward" />
                 <Label Text="Tap a service to ask for a quote."
-                       FontSize="14" TextColor="{StaticResource Muted}" Margin="0,4,0,0" />
+                       FontSize="14" TextColor="{DynamicResource Muted}" Margin="0,4,0,0" />
             </VerticalStackLayout>
 
             <!-- ===== 2. THE TEN SERVICES ===== -->
@@ -40,17 +27,17 @@
                                 <TapGestureRecognizer Tapped="OnServiceTapped" />
                             </Border.GestureRecognizers>
                             <Grid ColumnDefinitions="56,*" ColumnSpacing="14">
-                                <Border BackgroundColor="{StaticResource Mist}" StrokeThickness="0"
+                                <Border BackgroundColor="{DynamicResource Mist}" StrokeThickness="0"
                                         StrokeShape="RoundRectangle 28" WidthRequest="56" HeightRequest="56"
                                         VerticalOptions="Start">
                                     <Label Text="{Binding Icon}" FontSize="26"
                                            HorizontalOptions="Center" VerticalOptions="Center" />
                                 </Border>
                                 <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="3">
-                                    <Label Text="{Binding Title}" FontSize="17" FontAttributes="Bold" TextColor="{StaticResource Navy}" />
-                                    <Label Text="{Binding Description}" FontSize="14" LineHeight="1.4" TextColor="{StaticResource Muted}" />
+                                    <Label Text="{Binding Title}" FontSize="17" FontAttributes="Bold" TextColor="{DynamicResource Navy}" />
+                                    <Label Text="{Binding Description}" FontSize="14" LineHeight="1.4" TextColor="{DynamicResource Muted}" />
                                     <Label Text="Request this service  →" FontSize="13" FontAttributes="Bold"
-                                           TextColor="{StaticResource Steel}" Margin="0,6,0,0" />
+                                           TextColor="{DynamicResource Steel}" Margin="0,6,0,0" />
                                 </VerticalStackLayout>
                             </Grid>
                         </Border>
@@ -59,27 +46,27 @@
             </VerticalStackLayout>
 
             <!-- ===== 3. WHY CLIENTS CHOOSE US (navy section) ===== -->
-            <VerticalStackLayout Padding="24,52,24,52" Spacing="16" BackgroundColor="{StaticResource Navy}">
+            <VerticalStackLayout Padding="24,52,24,52" Spacing="16" BackgroundColor="{DynamicResource Navy}">
                 <controls:SectionHeader Tag="WHY CHOOSE US" TitleMain="Why Clients Choose"
                                         TitleAccent="Andiswa Business Consultation"
-                                        TagColor="{StaticResource SteelLight}"
-                                        MainColor="{StaticResource Cream}"
-                                        AccentColor="{StaticResource SteelLight}" />
+                                        TagColor="{DynamicResource SteelLight}"
+                                        MainColor="{DynamicResource Cream}"
+                                        AccentColor="{DynamicResource SteelLight}" />
 
                 <VerticalStackLayout Spacing="12" Margin="0,12,0,0"
                                      BindableLayout.ItemsSource="{x:Static models:SiteContent.Reasons}">
                     <BindableLayout.ItemTemplate>
                         <DataTemplate>
-                            <Border BackgroundColor="{StaticResource NavySoft}" Stroke="#33506E" StrokeThickness="1"
+                            <Border BackgroundColor="{DynamicResource NavySoft}" Stroke="#33506E" StrokeThickness="1"
                                     StrokeShape="RoundRectangle 14" Padding="18">
                                 <VerticalStackLayout Spacing="6">
                                     <HorizontalStackLayout Spacing="10">
-                                        <Label Text="▲" FontSize="10" TextColor="{StaticResource SteelLight}" VerticalOptions="Center" />
+                                        <Label Text="▲" FontSize="10" TextColor="{DynamicResource SteelLight}" VerticalOptions="Center" />
                                         <Label Text="{Binding Title}" FontSize="17" FontAttributes="Bold" TextColor="White"
                                                VerticalOptions="Center" />
                                     </HorizontalStackLayout>
                                     <Label Text="{Binding Description}" FontSize="14" LineHeight="1.45"
-                                           TextColor="{StaticResource OnDarkMuted}" />
+                                           TextColor="{DynamicResource OnDarkMuted}" />
                                 </VerticalStackLayout>
                             </Border>
                         </DataTemplate>

@@ -1,16 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<!--
-  TestimonialsPage.xaml  -  the Testimonials page (same content as testimonials.html on the website).
-  It opens ON TOP of another page, so the title bar (with the back arrow) is switched on.
-  The reviews come from SiteContent.Testimonials (Models/Models.cs).
--->
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:AndiswaConsultationApp.Controls"
              xmlns:models="clr-namespace:AndiswaConsultationApp.Models"
              x:Class="AndiswaConsultationApp.Pages.TestimonialsPage"
              Title="Testimonials"
-             BackgroundColor="{StaticResource Cream}"
+             BackgroundColor="{DynamicResource PageBg}"
              Shell.NavBarIsVisible="True">
 
     <ScrollView>
@@ -27,9 +22,9 @@
                     <DataTemplate>
                         <Border Style="{StaticResource Card}" Padding="22">
                             <VerticalStackLayout Spacing="14">
-                                <Label Text="{Binding Stars}" FontSize="20" TextColor="{StaticResource Steel}" />
+                                <Label Text="{Binding Stars}" FontSize="20" TextColor="{DynamicResource Steel}" />
                                 <Label Text="{Binding Quote}" FontSize="16" LineHeight="1.5" FontAttributes="Italic"
-                                       TextColor="{StaticResource Ink}" />
+                                       TextColor="{DynamicResource Ink}" />
                                 <HorizontalStackLayout Spacing="14">
                                     <Border BackgroundColor="{Binding AvatarColor}" StrokeThickness="0"
                                             StrokeShape="RoundRectangle 26" WidthRequest="52" HeightRequest="52">
@@ -37,8 +32,8 @@
                                                HorizontalOptions="Center" VerticalOptions="Center" />
                                     </Border>
                                     <VerticalStackLayout VerticalOptions="Center" Spacing="1">
-                                        <Label Text="{Binding Name}" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource Navy}" />
-                                        <Label Text="{Binding Role}" FontSize="13" TextColor="{StaticResource Muted}" />
+                                        <Label Text="{Binding Name}" FontSize="16" FontAttributes="Bold" TextColor="{DynamicResource Navy}" />
+                                        <Label Text="{Binding Role}" FontSize="13" TextColor="{DynamicResource Muted}" />
                                     </VerticalStackLayout>
                                 </HorizontalStackLayout>
                             </VerticalStackLayout>

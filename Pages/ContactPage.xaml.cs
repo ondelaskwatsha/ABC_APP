@@ -1,16 +1,3 @@
-// ============================================================================
-// ContactPage.xaml.cs  -  the CODE behind the Contact page
-// ----------------------------------------------------------------------------
-// This file:
-//   1. fills the "Service" drop-down with the same choices as the website
-//   2. loads the contact details (email, phone, address, hours, owner)
-//   3. checks the form when "Send Message" is tapped and sends it to the API
-//      -> the API saves it in the website's quotes table
-//      -> the admin sees it in admin.php under "Quote Requests"
-//   4. when there is no internet, the message is saved on the phone and sent later
-//   5. builds the "Quick answers" questions (the same answers as the website's chat assistant)
-//   6. selects the service in the drop-down when you arrive from the Services page or a project
-// ============================================================================
 using System.Net.Mail;
 using AndiswaConsultationApp.Models;
 using AndiswaConsultationApp.Services;
@@ -36,7 +23,7 @@ public partial class ContactPage : ContentPage
 
     public ContactPage(ApiService api)
     {
-        InitializeComponent();          // builds the layout from ContactPage.xaml
+        InitializeComponent();
         _api = api;
 
         ServicePicker.ItemsSource = Services;                          // fill the drop-down
@@ -56,8 +43,7 @@ public partial class ContactPage : ContentPage
             AppState.PendingService = null;     // use it only once
         }
 
-        // Try to send any messages that were saved while the phone was offline.
-        // "_ =" means "start it but don't wait for it".
+        // Try to send any messages that were saved while the phone was offline
         _ = _api.SyncPendingAsync();
 
         // Load the details if we have none yet, or if last time we were offline
@@ -71,7 +57,6 @@ public partial class ContactPage : ContentPage
         ErrorBox.Hide();
         try
         {
-            // Show the saved copy instantly, then the latest from the server
             if (_studio is null)
                 Show(await _api.GetSavedStudioAsync());
 
@@ -86,15 +71,15 @@ public partial class ContactPage : ContentPage
         }
     }
 
-    // Puts the details on screen. After BindingContext is set, {Binding Email} etc. show the values.
     private void Show(StudioInfo studio)
     {
         _studio = studio;
         BindingContext = studio;
-        Footer.ApplyStudio(studio);     // the footer shows the social media buttons
+        Footer.ApplyStudio(studio);
     }
 
-    // Creates the "Quick answers": tap a question to open or close its answer
+    // Creates the "Quick answers": tap a question to open or close its answer.
+    // ".Themed(...)" ties a colour to the theme so it follows dark / light mode.
     private void BuildFaq()
     {
         FaqLayout.Children.Clear();
@@ -105,18 +90,16 @@ public partial class ContactPage : ContentPage
             {
                 Text = "+",
                 FontSize = 22,
-                TextColor = Color.FromArgb("#3E6690"),
                 VerticalOptions = LayoutOptions.Center
-            };
+            }.Themed(Label.TextColorProperty, "Steel");
 
             var question = new Label
             {
                 Text = item.Question,
                 FontSize = 15,
                 FontAttributes = FontAttributes.Bold,
-                TextColor = Color.FromArgb("#1B2A41"),
                 VerticalOptions = LayoutOptions.Center
-            };
+            }.Themed(Label.TextColorProperty, "Navy");
 
             // The answer is hidden until the question is tapped
             var answer = new Label
@@ -124,10 +107,9 @@ public partial class ContactPage : ContentPage
                 Text = item.Answer,
                 FontSize = 14,
                 LineHeight = 1.45,
-                TextColor = Color.FromArgb("#5B6472"),
                 IsVisible = false,
                 Margin = new Thickness(0, 10, 0, 0)
-            };
+            }.Themed(Label.TextColorProperty, "Muted");
 
             // The question on the left, the + / - sign on the right
             var row = new Grid
@@ -144,13 +126,13 @@ public partial class ContactPage : ContentPage
 
             var card = new Border
             {
-                BackgroundColor = Colors.White,
-                Stroke = Color.FromArgb("#DDE2E8"),
                 StrokeThickness = 1,
                 StrokeShape = new RoundRectangle { CornerRadius = 14 },
                 Padding = new Thickness(16, 14),
                 Content = new VerticalStackLayout { Children = { row, answer } }
-            };
+            }
+            .Themed(Border.StrokeProperty, "Line")
+            .Themed(VisualElement.BackgroundColorProperty, "Surface");
 
             var tap = new TapGestureRecognizer();
             tap.Tapped += (_, _) =>
@@ -167,7 +149,7 @@ public partial class ContactPage : ContentPage
     // Runs when "Send Message" is tapped
     private async void OnSendClicked(object? sender, EventArgs e)
     {
-        // ---- Step 1: read what was typed. "?.Trim() ?? """ = remove spaces, or empty if nothing typed
+        // Step 1: read what was typed
         var first = FirstNameEntry.Text?.Trim() ?? "";
         var last = LastNameEntry.Text?.Trim() ?? "";
         var email = EmailEntry.Text?.Trim() ?? "";
@@ -175,8 +157,7 @@ public partial class ContactPage : ContentPage
         var service = ServicePicker.SelectedItem as string ?? "";
         var message = MessageEditor.Text?.Trim() ?? "";
 
-        // ---- Step 2: check the form BEFORE sending. "return" stops here if something is wrong.
-        //      (The API checks again, because you can never trust data from outside.)
+        // Step 2: check the form BEFORE sending
         if (first.Length == 0)
         {
             await DisplayAlert("Missing name", "Please enter your first name.", "OK");
@@ -201,13 +182,13 @@ public partial class ContactPage : ContentPage
             return;
         }
 
-        // ---- Step 3: send. Disable the button so it can't be tapped twice, and show the spinner.
+        // Step 3: send. Disable the button so it can't be tapped twice, and show the spinner.
         SendButton.IsEnabled = false;
         Busy.IsVisible = Busy.IsRunning = true;
 
         var result = await _api.SendQuoteAsync(new QuoteRequest
         {
-            Name = $"{first} {last}".Trim(),    // the website stores one "name", so we join first + last
+            Name = $"{first} {last}".Trim(),
             Email = email,
             Phone = phone,
             Service = service,
@@ -217,13 +198,12 @@ public partial class ContactPage : ContentPage
         Busy.IsVisible = Busy.IsRunning = false;
         SendButton.IsEnabled = true;
 
-        // ---- Step 4: tell the user what happened
+        // Step 4: tell the user what happened
         if (result.Success)
         {
-            // Clear the form
             FirstNameEntry.Text = LastNameEntry.Text = EmailEntry.Text = PhoneEntry.Text = string.Empty;
             MessageEditor.Text = string.Empty;
-            ServicePicker.SelectedIndex = -1;   // -1 = nothing selected
+            ServicePicker.SelectedIndex = -1;
 
             if (result.Queued)
                 await DisplayAlert("Saved on your phone",
@@ -253,14 +233,12 @@ public partial class ContactPage : ContentPage
         }
     }
 
-    // Tapping the email opens the phone's email app with the address filled in
     private async void OnEmailTapped(object? sender, TappedEventArgs e)
     {
         if (_studio is null) return;
         try { await Launcher.OpenAsync($"mailto:{_studio.Email}"); } catch { }
     }
 
-    // Tapping the phone number opens the dialler (spaces removed first)
     private async void OnPhoneTapped(object? sender, TappedEventArgs e)
     {
         if (_studio is null) return;

@@ -10,8 +10,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:models="clr-namespace:AndiswaConsultationApp.Models"
              x:Class="AndiswaConsultationApp.Controls.SiteFooter">
-
-    <VerticalStackLayout BackgroundColor="{StaticResource NavyDeep}" Padding="24,44,24,28" Spacing="20">
+    
+    <VerticalStackLayout BackgroundColor="{DynamicResource NavyDeep}" Padding="24,44,24,28" Spacing="20">
 
         <Label Text="A|B" FontSize="34" FontAttributes="Bold" TextColor="White" />
 

@@ -1,8 +1,3 @@
-// ============================================================================
-// MorePage.xaml.cs  -  the CODE behind the "More" tab
-// ----------------------------------------------------------------------------
-// Tapping a row opens that page on top of this one (with a back arrow).
-// ============================================================================
 using AndiswaConsultationApp.Models;
 using AndiswaConsultationApp.Services;
 
@@ -21,4 +16,8 @@ public partial class MorePage : ContentPage
         if (sender is BindableObject row && row.BindingContext is MenuLink link)
             await AppNavigation.OpenPageAsync(link.Route);
     }
+
+    // "Settings": opens the Settings page on top of this one
+    private async void OnSettingsTapped(object? sender, TappedEventArgs e) =>
+        await AppNavigation.OpenPageAsync("settings");
 }

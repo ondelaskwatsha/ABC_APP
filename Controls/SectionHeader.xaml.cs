@@ -1,31 +1,20 @@
-// ============================================================================
-// SectionHeader.xaml.cs  -  the settings (properties) of the title control
-// ----------------------------------------------------------------------------
-// A "BindableProperty" is a property you can set from XAML, for example
-//   <controls:SectionHeader Tag="WHO WE ARE" ... />
-// Each property below has two parts:
-//   1. the BindableProperty (registers it with MAUI)
-//   2. a normal C# property (get/set) that reads and writes it
-// ============================================================================
+// DARK MODE: the default colours are theme colours (see the constructor), so the title
+// follows dark / light mode. A page can still pick its own colours, like the navy sections do.
 namespace AndiswaConsultationApp.Controls;
 
 public partial class SectionHeader : ContentView
 {
-    // The small capital label, for example "WHO WE ARE"
     public static readonly BindableProperty TagProperty =
         BindableProperty.Create(nameof(Tag), typeof(string), typeof(SectionHeader), string.Empty);
 
-    // The first part of the big title
     public static readonly BindableProperty TitleMainProperty =
         BindableProperty.Create(nameof(TitleMain), typeof(string), typeof(SectionHeader), string.Empty);
 
-    // The second part of the big title (in the accent colour).
-    // propertyChanged: when it changes, tell the screen that HasAccent may have changed too.
     public static readonly BindableProperty TitleAccentProperty =
         BindableProperty.Create(nameof(TitleAccent), typeof(string), typeof(SectionHeader), string.Empty,
             propertyChanged: (b, _, _) => ((SectionHeader)b).OnPropertyChanged(nameof(HasAccent)));
 
-    // Colours (defaults = the website's navy theme on a light background)
+    // Colours (these defaults are only a fallback: the constructor links them to the theme)
     public static readonly BindableProperty TagColorProperty =
         BindableProperty.Create(nameof(TagColor), typeof(Color), typeof(SectionHeader), Color.FromArgb("#3E6690"));
 
@@ -71,11 +60,16 @@ public partial class SectionHeader : ContentView
         set => SetValue(AccentColorProperty, value);
     }
 
-    // True when there is a second title line to show. The XAML uses it to hide an empty line.
     public bool HasAccent => !string.IsNullOrWhiteSpace(TitleAccent);
 
     public SectionHeader()
     {
-        InitializeComponent();   // builds the layout from SectionHeader.xaml
+        InitializeComponent();
+
+        // Link the default colours to the theme. If a page sets TagColor / MainColor / AccentColor
+        // itself (for example on a navy section), that choice replaces these links.
+        SetDynamicResource(TagColorProperty, "Steel");
+        SetDynamicResource(MainColorProperty, "Navy");
+        SetDynamicResource(AccentColorProperty, "Steel");
     }
 }

@@ -1,24 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<!--
-  PortfolioPage.xaml  -  the Portfolio page (the website's "Projects" page, projects.html).
-
-  From top to bottom:
-    1. Title and short text
-    2. Search box + "Showing N Projects"
-    3. Filter buttons: All, Branding, Flyers, Posters, Social Media
-    4. Featured project
-    5. The gallery: two projects per row. Tap one to see it bigger.
-    6. Footer
-
-  The filter buttons and the gallery cards are created in PortfolioPage.xaml.cs
-  because they change when you search or filter.
--->
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:AndiswaConsultationApp.Controls"
              xmlns:models="clr-namespace:AndiswaConsultationApp.Models"
              x:Class="AndiswaConsultationApp.Pages.PortfolioPage"
-             BackgroundColor="{StaticResource Cream}"
+             BackgroundColor="{DynamicResource PageBg}"
              Shell.NavBarIsVisible="False">
 
     <ScrollView>
@@ -28,7 +14,7 @@
             <VerticalStackLayout Padding="24,56,24,12" Spacing="14">
                 <controls:SectionHeader Tag="OUR CREATIVE PORTFOLIO" TitleMain="Selected Projects" />
                 <Label Text="Explore our collection of branding, flyers, posters and social media designs created for businesses across different industries."
-                       FontSize="16" LineHeight="1.45" TextColor="{StaticResource Muted}" />
+                       FontSize="16" LineHeight="1.45" TextColor="{DynamicResource Muted}" />
             </VerticalStackLayout>
 
             <!-- ===== 2. SEARCH ===== -->
@@ -37,10 +23,10 @@
                     <Entry x:Name="SearchEntry" Placeholder="Search projects..." Style="{StaticResource FieldEntry}"
                            TextChanged="OnSearchTextChanged" />
                 </Border>
-                <Label x:Name="CountLabel" FontSize="13" TextColor="{StaticResource Muted}" />
+                <Label x:Name="CountLabel" FontSize="13" TextColor="{DynamicResource Muted}" />
             </VerticalStackLayout>
 
-            <!-- ===== 3. FILTER BUTTONS (created in PortfolioPage.xaml.cs, BuildFilters) ===== -->
+            <!-- ===== 3. FILTER BUTTONS (created in PortfolioPage.xaml.cs) ===== -->
             <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never" Margin="0,10,0,0">
                 <HorizontalStackLayout x:Name="FilterLayout" Spacing="10" Padding="24,0" />
             </ScrollView>
@@ -50,21 +36,21 @@
                     BindingContext="{x:Static models:SiteContent.FeaturedProject}">
                 <VerticalStackLayout Spacing="0">
                     <Image Source="{Binding Image}" Aspect="AspectFit" HeightRequest="200"
-                           BackgroundColor="{StaticResource Mist}" />
+                           BackgroundColor="{DynamicResource Mist}" />
                     <VerticalStackLayout Padding="20" Spacing="10">
                         <HorizontalStackLayout Spacing="8">
-                            <Label Text="▲" FontSize="10" TextColor="{StaticResource Steel}" VerticalOptions="Center" />
+                            <Label Text="▲" FontSize="10" TextColor="{DynamicResource Steel}" VerticalOptions="Center" />
                             <Label Text="FEATURED PROJECT" FontSize="12" CharacterSpacing="3" FontAttributes="Bold"
-                                   TextColor="{StaticResource Steel}" VerticalOptions="Center" />
+                                   TextColor="{DynamicResource Steel}" VerticalOptions="Center" />
                         </HorizontalStackLayout>
-                        <Label Text="{Binding Title}" FontSize="22" FontAttributes="Bold" TextColor="{StaticResource Navy}" />
-                        <Label Text="{Binding Description}" FontSize="15" LineHeight="1.45" TextColor="{StaticResource Muted}" />
+                        <Label Text="{Binding Title}" FontSize="22" FontAttributes="Bold" TextColor="{DynamicResource Navy}" />
+                        <Label Text="{Binding Description}" FontSize="15" LineHeight="1.45" TextColor="{DynamicResource Muted}" />
                         <VerticalStackLayout Spacing="4" Margin="0,4,0,0"
                                              BindableLayout.ItemsSource="{Binding Highlights}">
                             <BindableLayout.ItemTemplate>
                                 <DataTemplate>
                                     <Label Text="{Binding ., StringFormat='✓  {0}'}" FontSize="14"
-                                           TextColor="{StaticResource Steel}" />
+                                           TextColor="{DynamicResource Steel}" />
                                 </DataTemplate>
                             </BindableLayout.ItemTemplate>
                         </VerticalStackLayout>
@@ -74,12 +60,11 @@
                 </VerticalStackLayout>
             </Border>
 
-            <!-- ===== 5. THE GALLERY (cards are created in PortfolioPage.xaml.cs, BuildGallery) ===== -->
+            <!-- ===== 5. THE GALLERY (created in PortfolioPage.xaml.cs, BuildGallery) ===== -->
             <Grid x:Name="Gallery" ColumnDefinitions="*,*" ColumnSpacing="12" RowSpacing="12" Padding="24,26,24,0" />
 
-            <!-- Shown instead of the gallery when nothing matches the search -->
             <Label x:Name="EmptyLabel" Text="No projects match your search." IsVisible="False"
-                   FontSize="15" TextColor="{StaticResource Muted}" HorizontalTextAlignment="Center"
+                   FontSize="15" TextColor="{DynamicResource Muted}" HorizontalTextAlignment="Center"
                    Margin="24,30,24,0" />
 
             <BoxView HeightRequest="48" Color="Transparent" />

@@ -1,12 +1,3 @@
-// ============================================================================
-// PortfolioPage.xaml.cs  -  the CODE behind the Portfolio page
-// ----------------------------------------------------------------------------
-// This file:
-//   1. creates the five filter buttons (All, Branding, Flyers, Posters, Social Media)
-//   2. fills the gallery with the projects (from SiteContent.Projects)
-//   3. re-fills it when you type in the search box or tap a filter
-//   4. opens a project's detail page when a card is tapped
-// ============================================================================
 using AndiswaConsultationApp.Models;
 using AndiswaConsultationApp.Services;
 using Microsoft.Maui.Controls.Shapes;
@@ -33,6 +24,20 @@ public partial class PortfolioPage : ContentPage
         InitializeComponent();
         BuildFilters();
         ApplyFilter();
+    }
+
+    // While this page is on screen, re-colour the filter buttons if dark mode is switched
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        ThemeService.Changed += UpdateFilterColours;
+        UpdateFilterColours();      // also catches a change made while the page was away
+    }
+
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+        ThemeService.Changed -= UpdateFilterColours;
     }
 
     // Creates one button for every filter
@@ -66,15 +71,20 @@ public partial class PortfolioPage : ContentPage
         UpdateFilterColours();
     }
 
-    // The selected button is navy with white text, the others are white with navy text
+    // The selected button is navy with white text, the others use the card colour with navy text.
+    // The colours are read from the current theme, so they work in dark mode too.
     private void UpdateFilterColours()
     {
+        var navy = ThemeService.Get("Navy");
+        var surface = ThemeService.Get("Surface");
+        var line = ThemeService.Get("Line");
+
         foreach (var (key, button) in _filterButtons)
         {
             var selected = key == _filter;
-            button.BackgroundColor = selected ? Color.FromArgb("#1B2A41") : Colors.White;
-            button.TextColor = selected ? Colors.White : Color.FromArgb("#1B2A41");
-            button.BorderColor = selected ? Color.FromArgb("#1B2A41") : Color.FromArgb("#DDE2E8");
+            button.BackgroundColor = selected ? navy : surface;
+            button.TextColor = selected ? Colors.White : navy;
+            button.BorderColor = selected ? navy : line;
         }
     }
 
@@ -104,20 +114,18 @@ public partial class PortfolioPage : ContentPage
 
         for (var i = 0; i < projects.Count; i++)
         {
-            if (i % 2 == 0)                                       // a new row every two projects
+            if (i % 2 == 0)
                 Gallery.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
 
-            Gallery.Add(BuildCard(projects[i]), i % 2, i / 2);    // column = 0 or 1, row = 0, 0, 1, 1 ...
+            Gallery.Add(BuildCard(projects[i]), i % 2, i / 2);
         }
     }
 
-    // One project card: picture on top, category + title + short text underneath
+    // One project card. ".Themed(...)" ties a colour to the theme so it follows dark / light mode.
     private Border BuildCard(ProjectItem project)
     {
         var card = new Border
         {
-            BackgroundColor = Colors.White,
-            Stroke = Color.FromArgb("#DDE2E8"),
             StrokeThickness = 1,
             StrokeShape = new RoundRectangle { CornerRadius = 16 },
             Padding = 0,
@@ -130,9 +138,8 @@ public partial class PortfolioPage : ContentPage
                     {
                         Source = ImageSource.FromFile(project.Image),
                         Aspect = Aspect.AspectFit,           // show the whole design, never cropped
-                        HeightRequest = 140,
-                        BackgroundColor = Color.FromArgb("#EEF1F4")
-                    },
+                        HeightRequest = 140
+                    }.Themed(VisualElement.BackgroundColorProperty, "Mist"),
                     new VerticalStackLayout
                     {
                         Padding = new Thickness(12, 10, 12, 14),
@@ -144,31 +151,29 @@ public partial class PortfolioPage : ContentPage
                                 Text = project.Category.ToUpperInvariant(),
                                 FontSize = 11,
                                 CharacterSpacing = 1,
-                                FontAttributes = FontAttributes.Bold,
-                                TextColor = Color.FromArgb("#3E6690")
-                            },
+                                FontAttributes = FontAttributes.Bold
+                            }.Themed(Label.TextColorProperty, "Steel"),
                             new Label
                             {
                                 Text = project.Title,
                                 FontSize = 15,
-                                FontAttributes = FontAttributes.Bold,
-                                TextColor = Color.FromArgb("#1B2A41")
-                            },
+                                FontAttributes = FontAttributes.Bold
+                            }.Themed(Label.TextColorProperty, "Navy"),
                             new Label
                             {
                                 Text = project.Blurb,
                                 FontSize = 12,
                                 LineBreakMode = LineBreakMode.TailTruncation,
-                                MaxLines = 2,
-                                TextColor = Color.FromArgb("#5B6472")
-                            }
+                                MaxLines = 2
+                            }.Themed(Label.TextColorProperty, "Muted")
                         }
                     }
                 }
             }
-        };
+        }
+        .Themed(Border.StrokeProperty, "Line")
+        .Themed(VisualElement.BackgroundColorProperty, "Surface");
 
-        // When the card is tapped, open the project's detail page
         var tap = new TapGestureRecognizer();
         tap.Tapped += async (_, _) => await AppNavigation.OpenProjectAsync(project);
         card.GestureRecognizers.Add(tap);
@@ -176,10 +181,8 @@ public partial class PortfolioPage : ContentPage
         return card;
     }
 
-    // Runs every time a letter is typed in the search box
     private void OnSearchTextChanged(object? sender, TextChangedEventArgs e) => ApplyFilter();
 
-    // "View Project" on the featured project
     private async void OnFeaturedClicked(object? sender, EventArgs e) =>
         await AppNavigation.OpenProjectAsync(SiteContent.FeaturedProject);
 }

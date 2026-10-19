@@ -1,19 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<!--
-  ProjectDetailPage.xaml  -  one project, bigger (the website shows this in a pop-up).
-
-  It opens ON TOP of the Portfolio (or Home) page, so the title bar is switched on:
-  that gives the back arrow at the top left.
-
-  ProjectDetailPage.xaml.cs receives the project and puts it in BindingContext,
-  so {Binding Title}, {Binding Image} ... read from that project.
--->
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:models="clr-namespace:AndiswaConsultationApp.Models"
              x:Class="AndiswaConsultationApp.Pages.ProjectDetailPage"
              Title="Project"
-             BackgroundColor="{StaticResource Cream}"
+             BackgroundColor="{DynamicResource PageBg}"
              Shell.NavBarIsVisible="True">
 
     <ScrollView>
@@ -21,18 +12,18 @@
 
             <!-- The design, shown whole -->
             <Image Source="{Binding Image}" Aspect="AspectFit" HeightRequest="320"
-                   BackgroundColor="{StaticResource Mist}" />
+                   BackgroundColor="{DynamicResource Mist}" />
 
             <VerticalStackLayout Padding="24,26,24,48" Spacing="16">
 
                 <!-- Category label (for example "Branding") -->
-                <Border BackgroundColor="{StaticResource Navy}" StrokeThickness="0" StrokeShape="RoundRectangle 14"
+                <Border BackgroundColor="{DynamicResource Navy}" StrokeThickness="0" StrokeShape="RoundRectangle 14"
                         Padding="12,5" HorizontalOptions="Start">
                     <Label Text="{Binding Category}" FontSize="12" FontAttributes="Bold" TextColor="White" />
                 </Border>
 
-                <Label Text="{Binding Title}" FontSize="28" FontAttributes="Bold" TextColor="{StaticResource Navy}" />
-                <Label Text="{Binding Description}" FontSize="16" LineHeight="1.5" TextColor="{StaticResource Ink}" />
+                <Label Text="{Binding Title}" FontSize="28" FontAttributes="Bold" TextColor="{DynamicResource Navy}" />
+                <Label Text="{Binding Description}" FontSize="16" LineHeight="1.5" TextColor="{DynamicResource Ink}" />
 
                 <!-- Tools / tags (only the featured project has them) -->
                 <VerticalStackLayout Spacing="4" IsVisible="{Binding HasHighlights}"
@@ -40,25 +31,25 @@
                     <BindableLayout.ItemTemplate>
                         <DataTemplate>
                             <Label Text="{Binding ., StringFormat='✓  {0}'}" FontSize="15"
-                                   TextColor="{StaticResource Steel}" />
+                                   TextColor="{DynamicResource Steel}" />
                         </DataTemplate>
                     </BindableLayout.ItemTemplate>
                 </VerticalStackLayout>
 
-                <!-- Project details (the same three lines as the website's pop-up) -->
+                <!-- Project details -->
                 <Border Style="{StaticResource Card}" Margin="0,8,0,0">
                     <VerticalStackLayout Spacing="16">
                         <VerticalStackLayout Spacing="3">
-                            <Label Text="CLIENT" FontSize="12" CharacterSpacing="1" FontAttributes="Bold" TextColor="{StaticResource Steel}" />
-                            <Label Text="{x:Static models:SiteContent.ProjectClient}" FontSize="16" TextColor="{StaticResource Ink}" />
+                            <Label Text="CLIENT" FontSize="12" CharacterSpacing="1" FontAttributes="Bold" TextColor="{DynamicResource Steel}" />
+                            <Label Text="{x:Static models:SiteContent.ProjectClient}" FontSize="16" TextColor="{DynamicResource Ink}" />
                         </VerticalStackLayout>
                         <VerticalStackLayout Spacing="3">
-                            <Label Text="SOFTWARE" FontSize="12" CharacterSpacing="1" FontAttributes="Bold" TextColor="{StaticResource Steel}" />
-                            <Label Text="{x:Static models:SiteContent.ProjectSoftware}" FontSize="16" TextColor="{StaticResource Ink}" />
+                            <Label Text="SOFTWARE" FontSize="12" CharacterSpacing="1" FontAttributes="Bold" TextColor="{DynamicResource Steel}" />
+                            <Label Text="{x:Static models:SiteContent.ProjectSoftware}" FontSize="16" TextColor="{DynamicResource Ink}" />
                         </VerticalStackLayout>
                         <VerticalStackLayout Spacing="3">
-                            <Label Text="CATEGORY" FontSize="12" CharacterSpacing="1" FontAttributes="Bold" TextColor="{StaticResource Steel}" />
-                            <Label Text="{x:Static models:SiteContent.ProjectCategory}" FontSize="16" TextColor="{StaticResource Ink}" />
+                            <Label Text="CATEGORY" FontSize="12" CharacterSpacing="1" FontAttributes="Bold" TextColor="{DynamicResource Steel}" />
+                            <Label Text="{x:Static models:SiteContent.ProjectCategory}" FontSize="16" TextColor="{DynamicResource Ink}" />
                         </VerticalStackLayout>
                     </VerticalStackLayout>
                 </Border>

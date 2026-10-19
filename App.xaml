@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!--
   App.xaml  -  the THEME of the whole app (colours and styles).
-
-  These are the SAME colours as the website (index.html / nav-unified.css), so the app and the
-  website look like one brand. Anything defined here can be used on every page with
-  {StaticResource Name}.   Example:  TextColor="{StaticResource Navy}"
-  If you change a colour here, it changes on every page at once.
+  Colours are used with {DynamicResource Name} so they change live with dark mode.
+  The values here are the LIGHT theme; ThemeService.cs swaps them for the dark values.
 -->
 <Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
@@ -13,52 +10,71 @@
     <Application.Resources>
         <ResourceDictionary>
 
-            <!-- ============ THE NAVY THEME (same values as the website) ============ -->
-            <Color x:Key="Navy">#1B2A41</Color>         <!-- website "espresso": header, buttons, main headings -->
-            <Color x:Key="NavyDeep">#101B2B</Color>     <!-- website footer background -->
-            <Color x:Key="NavySoft">#24384F</Color>     <!-- cards on a navy background -->
-            <Color x:Key="Steel">#3E6690</Color>        <!-- website "tan": accents, labels, links -->
-            <Color x:Key="SteelLight">#5B8DB8</Color>   <!-- website "tan-bright": highlights on navy -->
-            <Color x:Key="Cream">#F7F8FA</Color>        <!-- website page background / text on navy -->
-            <Color x:Key="Mist">#EEF1F4</Color>         <!-- soft grey-blue section background -->
-            <Color x:Key="Ink">#232830</Color>          <!-- main text -->
-            <Color x:Key="Muted">#5B6472</Color>        <!-- smaller grey text -->
-            <Color x:Key="Soft">#8891A0</Color>         <!-- placeholder / unselected text -->
-            <Color x:Key="Line">#DDE2E8</Color>         <!-- thin outlines on light backgrounds -->
-            <Color x:Key="OnDarkMuted">#B9C4D2</Color>  <!-- paragraph text on a navy background -->
+            <!-- ============ COLOURS (light theme values) ============ -->
+            <Color x:Key="Navy">#1B2A41</Color>
+            <Color x:Key="NavyDeep">#101B2B</Color>
+            <Color x:Key="NavySoft">#24384F</Color>
+            <Color x:Key="Steel">#3E6690</Color>
+            <Color x:Key="SteelLight">#5B8DB8</Color>
+            <Color x:Key="Cream">#F7F8FA</Color>
+            <Color x:Key="Mist">#EEF1F4</Color>
+            <Color x:Key="Ink">#232830</Color>
+            <Color x:Key="Muted">#5B6472</Color>
+            <Color x:Key="Soft">#8891A0</Color>
+            <Color x:Key="Line">#DDE2E8</Color>
+            <Color x:Key="OnDarkMuted">#B9C4D2</Color>
+            <Color x:Key="PageBg">#F7F8FA</Color>
+            <Color x:Key="Surface">#FFFFFF</Color>
 
-            <!--
-              A Style is a reusable set of settings. Instead of repeating the same
-              settings on every button, we write them once here and use
-              Style="{StaticResource PrimaryButton}" on the page.
-            -->
+            <!-- The font of the whole app. Empty = the phone's normal font. Set by ThemeService. -->
+            <x:String x:Key="AppFontFamily"></x:String>
+
+            <!-- Apply the chosen font to every Label, Button, Entry, Editor and Picker -->
+            <Style TargetType="Label">
+                <Setter Property="FontFamily" Value="{DynamicResource AppFontFamily}" />
+            </Style>
+            <Style TargetType="Button">
+                <Setter Property="FontFamily" Value="{DynamicResource AppFontFamily}" />
+            </Style>
+            <Style TargetType="Entry">
+                <Setter Property="FontFamily" Value="{DynamicResource AppFontFamily}" />
+            </Style>
+            <Style TargetType="Editor">
+                <Setter Property="FontFamily" Value="{DynamicResource AppFontFamily}" />
+            </Style>
+            <Style TargetType="Picker">
+                <Setter Property="FontFamily" Value="{DynamicResource AppFontFamily}" />
+            </Style>
 
             <!-- Main button: navy pill with white text (on light backgrounds) -->
             <Style x:Key="PrimaryButton" TargetType="Button">
-                <Setter Property="BackgroundColor" Value="{StaticResource Navy}" />
+                <Setter Property="BackgroundColor" Value="{DynamicResource Navy}" />
                 <Setter Property="TextColor" Value="White" />
+                <Setter Property="FontFamily" Value="{DynamicResource AppFontFamily}" />
                 <Setter Property="FontAttributes" Value="Bold" />
                 <Setter Property="FontSize" Value="15" />
                 <Setter Property="CornerRadius" Value="26" />
                 <Setter Property="HeightRequest" Value="52" />
             </Style>
 
-            <!-- Secondary button: navy outline (on light backgrounds) -->
+            <!-- Secondary button: navy outline -->
             <Style x:Key="OutlineButton" TargetType="Button">
                 <Setter Property="BackgroundColor" Value="Transparent" />
-                <Setter Property="TextColor" Value="{StaticResource Navy}" />
-                <Setter Property="BorderColor" Value="{StaticResource Navy}" />
+                <Setter Property="TextColor" Value="{DynamicResource Navy}" />
+                <Setter Property="BorderColor" Value="{DynamicResource Navy}" />
                 <Setter Property="BorderWidth" Value="1.5" />
+                <Setter Property="FontFamily" Value="{DynamicResource AppFontFamily}" />
                 <Setter Property="FontAttributes" Value="Bold" />
                 <Setter Property="FontSize" Value="15" />
                 <Setter Property="CornerRadius" Value="26" />
                 <Setter Property="HeightRequest" Value="52" />
             </Style>
 
-            <!-- Main button on a NAVY background: light pill with navy text (like the website hero) -->
+            <!-- Main button on a NAVY background: light pill -->
             <Style x:Key="LightButton" TargetType="Button">
-                <Setter Property="BackgroundColor" Value="{StaticResource Cream}" />
-                <Setter Property="TextColor" Value="{StaticResource Navy}" />
+                <Setter Property="BackgroundColor" Value="{DynamicResource Cream}" />
+                <Setter Property="TextColor" Value="{DynamicResource NavyDeep}" />
+                <Setter Property="FontFamily" Value="{DynamicResource AppFontFamily}" />
                 <Setter Property="FontAttributes" Value="Bold" />
                 <Setter Property="FontSize" Value="15" />
                 <Setter Property="CornerRadius" Value="26" />
@@ -68,46 +84,49 @@
             <!-- Secondary button on a NAVY background: light outline -->
             <Style x:Key="LightOutlineButton" TargetType="Button">
                 <Setter Property="BackgroundColor" Value="Transparent" />
-                <Setter Property="TextColor" Value="{StaticResource Cream}" />
+                <Setter Property="TextColor" Value="{DynamicResource Cream}" />
                 <Setter Property="BorderColor" Value="#8FA3BA" />
                 <Setter Property="BorderWidth" Value="1.5" />
+                <Setter Property="FontFamily" Value="{DynamicResource AppFontFamily}" />
                 <Setter Property="FontAttributes" Value="Bold" />
                 <Setter Property="FontSize" Value="15" />
                 <Setter Property="CornerRadius" Value="26" />
                 <Setter Property="HeightRequest" Value="52" />
             </Style>
 
-            <!-- A white card with a thin outline and rounded corners -->
+            <!-- A card with a thin outline and rounded corners -->
             <Style x:Key="Card" TargetType="Border">
-                <Setter Property="BackgroundColor" Value="White" />
-                <Setter Property="Stroke" Value="{StaticResource Line}" />
+                <Setter Property="BackgroundColor" Value="{DynamicResource Surface}" />
+                <Setter Property="Stroke" Value="{DynamicResource Line}" />
                 <Setter Property="StrokeThickness" Value="1" />
                 <Setter Property="StrokeShape" Value="RoundRectangle 16" />
                 <Setter Property="Padding" Value="20" />
             </Style>
 
-            <!-- Rounded outline around each form field on the Contact page -->
+            <!-- Rounded outline around each form field -->
             <Style x:Key="FieldBorder" TargetType="Border">
-                <Setter Property="Stroke" Value="{StaticResource Line}" />
+                <Setter Property="Stroke" Value="{DynamicResource Line}" />
                 <Setter Property="StrokeThickness" Value="1.5" />
                 <Setter Property="StrokeShape" Value="RoundRectangle 12" />
                 <Setter Property="Padding" Value="14,0" />
-                <Setter Property="BackgroundColor" Value="White" />
+                <Setter Property="BackgroundColor" Value="{DynamicResource Surface}" />
             </Style>
 
             <!-- The text box inside the outline -->
             <Style x:Key="FieldEntry" TargetType="Entry">
                 <Setter Property="FontSize" Value="16" />
-                <Setter Property="TextColor" Value="{StaticResource Ink}" />
-                <Setter Property="PlaceholderColor" Value="{StaticResource Soft}" />
+                <Setter Property="FontFamily" Value="{DynamicResource AppFontFamily}" />
+                <Setter Property="TextColor" Value="{DynamicResource Ink}" />
+                <Setter Property="PlaceholderColor" Value="{DynamicResource Soft}" />
                 <Setter Property="BackgroundColor" Value="Transparent" />
                 <Setter Property="HeightRequest" Value="52" />
             </Style>
 
-            <!-- The small title above each field, for example "Email Address" -->
+            <!-- The small title above each field -->
             <Style x:Key="FieldLabel" TargetType="Label">
                 <Setter Property="FontSize" Value="14" />
-                <Setter Property="TextColor" Value="{StaticResource Ink}" />
+                <Setter Property="FontFamily" Value="{DynamicResource AppFontFamily}" />
+                <Setter Property="TextColor" Value="{DynamicResource Ink}" />
                 <Setter Property="Margin" Value="0,14,0,6" />
             </Style>
 

@@ -1,45 +1,19 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<!--
-  HomePage.xaml  -  WHAT the Home page looks like (the layout).
-  The C# file HomePage.xaml.cs decides WHAT DATA goes in it.
-
-  How to read XAML:
-    Each <Tag> is one thing on screen. Things inside a tag sit inside it.
-    VerticalStackLayout   = puts its children one under the other
-    HorizontalStackLayout = puts its children side by side
-    Label = text,  Button = button,  Border = a box with an outline,  Grid = rows and columns
-    {Binding HeroText}    = "show the HeroText value from the data" (set in the C# file)
-    {StaticResource Navy} = "use the colour called Navy from App.xaml"
-    {x:Static models:SiteContent.X} = "use the website text X from Models/Models.cs"
-    Padding="24,64,24,52" = space inside: left, top, right, bottom
-
-  The page from top to bottom (same order as a visit to the website):
-    1. Navy hero: tagline, big headline, short text, two buttons
-    2. Message box (only visible when offline or on error)
-    3. Four numbers in a 2 x 2 grid
-    4. "Who we are" section
-    5. "What we create": a preview of the services
-    6. Featured project
-    7. "Client love": a testimonial
-    8. Call to action + footer
--->
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:AndiswaConsultationApp.Controls"
              xmlns:models="clr-namespace:AndiswaConsultationApp.Models"
              x:Class="AndiswaConsultationApp.Pages.HomePage"
-             BackgroundColor="{StaticResource Cream}"
+             BackgroundColor="{DynamicResource PageBg}"
              Shell.NavBarIsVisible="False">
 
     <!-- RefreshView: pull the page down to load fresh data from the server -->
-    <RefreshView x:Name="Refresh" RefreshColor="{StaticResource Navy}">
-        <!-- ScrollView: lets the page scroll when it is taller than the screen -->
+    <RefreshView x:Name="Refresh" RefreshColor="{DynamicResource Navy}">
         <ScrollView>
             <VerticalStackLayout Spacing="0">
 
                 <!-- ===== 1. NAVY HERO SECTION ===== -->
                 <VerticalStackLayout Padding="24,72,24,56" Spacing="22">
-                    <!-- The background fades from very dark navy (top left) to lighter navy (bottom right) -->
                     <VerticalStackLayout.Background>
                         <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                             <GradientStop Color="#101B2B" Offset="0.0" />
@@ -48,24 +22,20 @@
                         </LinearGradientBrush>
                     </VerticalStackLayout.Background>
 
-                    <!-- "WE DESIGN. YOU GROW." (comes from the database) -->
                     <HorizontalStackLayout Spacing="10">
-                        <Label Text="▲" FontSize="10" TextColor="{StaticResource SteelLight}" VerticalOptions="Center" />
+                        <Label Text="▲" FontSize="10" TextColor="{DynamicResource SteelLight}" VerticalOptions="Center" />
                         <Label Text="{Binding Tagline}" FontSize="12" CharacterSpacing="4" FontAttributes="Bold"
-                               TextColor="{StaticResource SteelLight}" VerticalOptions="Center" />
+                               TextColor="{DynamicResource SteelLight}" VerticalOptions="Center" />
                     </HorizontalStackLayout>
 
-                    <!-- The big headline, on three lines. The middle word is light blue. -->
                     <VerticalStackLayout Spacing="-2">
-                        <Label Text="Bringing Your" FontSize="42" FontAttributes="Bold" TextColor="{StaticResource Cream}" />
-                        <Label Text="Creative" FontSize="42" FontAttributes="Bold" TextColor="{StaticResource SteelLight}" />
-                        <Label Text="Vision to Life" FontSize="42" FontAttributes="Bold" TextColor="{StaticResource Cream}" />
+                        <Label Text="Bringing Your" FontSize="42" FontAttributes="Bold" TextColor="{DynamicResource Cream}" />
+                        <Label Text="Creative" FontSize="42" FontAttributes="Bold" TextColor="{DynamicResource SteelLight}" />
+                        <Label Text="Vision to Life" FontSize="42" FontAttributes="Bold" TextColor="{DynamicResource Cream}" />
                     </VerticalStackLayout>
 
-                    <!-- Short description (comes from the database) -->
-                    <Label Text="{Binding HeroText}" FontSize="16" LineHeight="1.5" TextColor="{StaticResource OnDarkMuted}" />
+                    <Label Text="{Binding HeroText}" FontSize="16" LineHeight="1.5" TextColor="{DynamicResource OnDarkMuted}" />
 
-                    <!-- Clicked="..." runs that method in HomePage.xaml.cs -->
                     <Button Text="View Portfolio  →" Style="{StaticResource LightButton}"
                             Margin="0,10,0,0" Clicked="OnViewPortfolioClicked" />
 
@@ -75,22 +45,20 @@
                 <!-- ===== 2. MESSAGE BOX (hidden unless offline or something went wrong) ===== -->
                 <controls:ErrorBox x:Name="ErrorBox" />
 
-                <!-- ===== 3. FOUR NUMBERS: two columns ("*,*" = two equal columns).
-                     The boxes are created in HomePage.xaml.cs (BuildStats) because they come from the database. ===== -->
-                <Grid x:Name="StatsGrid" ColumnDefinitions="*,*" BackgroundColor="White" />
+                <!-- ===== 3. FOUR NUMBERS (boxes are created in HomePage.xaml.cs, BuildStats) ===== -->
+                <Grid x:Name="StatsGrid" ColumnDefinitions="*,*" BackgroundColor="{DynamicResource Surface}" />
 
-                <!-- ===== 4. "WHO WE ARE" SECTION on a soft background ===== -->
-                <VerticalStackLayout Padding="24,48,24,52" Spacing="20" BackgroundColor="{StaticResource Mist}">
+                <!-- ===== 4. "WHO WE ARE" ===== -->
+                <VerticalStackLayout Padding="24,48,24,52" Spacing="20" BackgroundColor="{DynamicResource Mist}">
                     <controls:SectionHeader Tag="WHO WE ARE" TitleMain="A Creative Studio Built on" TitleAccent="Bold Ideas" />
-                    <Label Text="{Binding AboutText1}" FontSize="17" LineHeight="1.5" TextColor="{StaticResource Ink}" />
-                    <Label Text="{Binding AboutText2}" FontSize="15" LineHeight="1.45" TextColor="{StaticResource Muted}" />
+                    <Label Text="{Binding AboutText1}" FontSize="17" LineHeight="1.5" TextColor="{DynamicResource Ink}" />
+                    <Label Text="{Binding AboutText2}" FontSize="15" LineHeight="1.45" TextColor="{DynamicResource Muted}" />
                     <Button Text="Learn More About Us  →" Style="{StaticResource OutlineButton}"
                             Margin="0,6,0,0" Clicked="OnAboutClicked" />
                 </VerticalStackLayout>
 
-                <!-- ===== 5. WHAT WE CREATE: a preview of the first six services =====
-                     BindableLayout.ItemsSource = "make one row for every service in the list" -->
-                <VerticalStackLayout Padding="24,52,24,52" Spacing="14" BackgroundColor="White">
+                <!-- ===== 5. WHAT WE CREATE ===== -->
+                <VerticalStackLayout Padding="24,52,24,52" Spacing="14" BackgroundColor="{DynamicResource Surface}">
                     <controls:SectionHeader Tag="WHAT WE CREATE" TitleMain="Design Services That" TitleAccent="Move Brands Forward" />
 
                     <VerticalStackLayout Spacing="12" Margin="0,10,0,0"
@@ -99,14 +67,14 @@
                             <DataTemplate>
                                 <Border Style="{StaticResource Card}" Padding="16">
                                     <Grid ColumnDefinitions="52,*" ColumnSpacing="14">
-                                        <Border BackgroundColor="{StaticResource Mist}" StrokeThickness="0"
+                                        <Border BackgroundColor="{DynamicResource Mist}" StrokeThickness="0"
                                                 StrokeShape="RoundRectangle 26" WidthRequest="52" HeightRequest="52">
                                             <Label Text="{Binding Icon}" FontSize="24"
                                                    HorizontalOptions="Center" VerticalOptions="Center" />
                                         </Border>
                                         <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
-                                            <Label Text="{Binding Title}" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource Navy}" />
-                                            <Label Text="{Binding Description}" FontSize="13" LineHeight="1.35" TextColor="{StaticResource Muted}" />
+                                            <Label Text="{Binding Title}" FontSize="16" FontAttributes="Bold" TextColor="{DynamicResource Navy}" />
+                                            <Label Text="{Binding Description}" FontSize="13" LineHeight="1.35" TextColor="{DynamicResource Muted}" />
                                         </VerticalStackLayout>
                                     </Grid>
                                 </Border>
@@ -119,24 +87,23 @@
                 </VerticalStackLayout>
 
                 <!-- ===== 6. FEATURED PROJECT ===== -->
-                <VerticalStackLayout Padding="24,52,24,52" Spacing="20" BackgroundColor="{StaticResource Mist}">
+                <VerticalStackLayout Padding="24,52,24,52" Spacing="20" BackgroundColor="{DynamicResource Mist}">
                     <controls:SectionHeader Tag="FEATURED PROJECT" TitleMain="Our Creative" TitleAccent="Portfolio" />
 
-                    <!-- BindingContext = "the data this box reads from": the featured project -->
                     <Border Style="{StaticResource Card}" Padding="0"
                             BindingContext="{x:Static models:SiteContent.FeaturedProject}">
                         <VerticalStackLayout Spacing="0">
                             <Image Source="{Binding Image}" Aspect="AspectFit" HeightRequest="210"
-                                   BackgroundColor="{StaticResource Cream}" />
+                                   BackgroundColor="{DynamicResource PageBg}" />
                             <VerticalStackLayout Padding="20" Spacing="10">
-                                <Label Text="{Binding Title}" FontSize="22" FontAttributes="Bold" TextColor="{StaticResource Navy}" />
-                                <Label Text="{Binding Description}" FontSize="15" LineHeight="1.45" TextColor="{StaticResource Muted}" />
+                                <Label Text="{Binding Title}" FontSize="22" FontAttributes="Bold" TextColor="{DynamicResource Navy}" />
+                                <Label Text="{Binding Description}" FontSize="15" LineHeight="1.45" TextColor="{DynamicResource Muted}" />
                                 <VerticalStackLayout Spacing="4" Margin="0,4,0,0"
                                                      BindableLayout.ItemsSource="{Binding Highlights}">
                                     <BindableLayout.ItemTemplate>
                                         <DataTemplate>
                                             <Label Text="{Binding ., StringFormat='✓  {0}'}" FontSize="14"
-                                                   TextColor="{StaticResource Steel}" />
+                                                   TextColor="{DynamicResource Steel}" />
                                         </DataTemplate>
                                     </BindableLayout.ItemTemplate>
                                 </VerticalStackLayout>
@@ -147,8 +114,8 @@
                     </Border>
                 </VerticalStackLayout>
 
-                <!-- ===== 7. CLIENT LOVE: the first testimonial ===== -->
-                <VerticalStackLayout Padding="24,52,24,52" Spacing="14" BackgroundColor="White">
+                <!-- ===== 7. CLIENT LOVE ===== -->
+                <VerticalStackLayout Padding="24,52,24,52" Spacing="14" BackgroundColor="{DynamicResource Surface}">
                     <controls:SectionHeader Tag="CLIENT LOVE" TitleMain="What Our Clients Say" />
 
                     <VerticalStackLayout Spacing="12" Margin="0,10,0,0"
@@ -157,9 +124,9 @@
                             <DataTemplate>
                                 <Border Style="{StaticResource Card}">
                                     <VerticalStackLayout Spacing="14">
-                                        <Label Text="{Binding Stars}" FontSize="18" TextColor="{StaticResource Steel}" />
+                                        <Label Text="{Binding Stars}" FontSize="18" TextColor="{DynamicResource Steel}" />
                                         <Label Text="{Binding Quote}" FontSize="15" LineHeight="1.5" FontAttributes="Italic"
-                                               TextColor="{StaticResource Ink}" />
+                                               TextColor="{DynamicResource Ink}" />
                                         <HorizontalStackLayout Spacing="14">
                                             <Border BackgroundColor="{Binding AvatarColor}" StrokeThickness="0"
                                                     StrokeShape="RoundRectangle 24" WidthRequest="48" HeightRequest="48">
@@ -167,8 +134,8 @@
                                                        HorizontalOptions="Center" VerticalOptions="Center" />
                                             </Border>
                                             <VerticalStackLayout VerticalOptions="Center" Spacing="1">
-                                                <Label Text="{Binding Name}" FontSize="15" FontAttributes="Bold" TextColor="{StaticResource Navy}" />
-                                                <Label Text="{Binding Role}" FontSize="13" TextColor="{StaticResource Muted}" />
+                                                <Label Text="{Binding Name}" FontSize="15" FontAttributes="Bold" TextColor="{DynamicResource Navy}" />
+                                                <Label Text="{Binding Role}" FontSize="13" TextColor="{DynamicResource Muted}" />
                                             </VerticalStackLayout>
                                         </HorizontalStackLayout>
                                     </VerticalStackLayout>
@@ -182,11 +149,11 @@
                 </VerticalStackLayout>
 
                 <!-- ===== 8. CALL TO ACTION ===== -->
-                <VerticalStackLayout Padding="24,52,24,56" Spacing="16" BackgroundColor="{StaticResource Navy}">
+                <VerticalStackLayout Padding="24,52,24,56" Spacing="16" BackgroundColor="{DynamicResource Navy}">
                     <Label Text="Let's build something you're proud to put your name on."
                            FontSize="26" FontAttributes="Bold" TextColor="White" />
                     <Label Text="Tell us about the project and we'll come back to you within one business day with next steps."
-                           FontSize="15" LineHeight="1.45" TextColor="{StaticResource OnDarkMuted}" />
+                           FontSize="15" LineHeight="1.45" TextColor="{DynamicResource OnDarkMuted}" />
                     <Button Text="Get a Free Quote  →" Style="{StaticResource LightButton}"
                             Margin="0,8,0,0" Clicked="OnQuoteClicked" />
                 </VerticalStackLayout>
