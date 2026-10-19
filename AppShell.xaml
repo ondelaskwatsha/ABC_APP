@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!--
-  AppShell.xaml  -  the NAVIGATION of the app: 5 tabs (Home, Services, Portfolio, Contact, More).
+  AppShell.xaml  -  the NAVIGATION of the app: the tabs (Home, Services, Portfolio, Contact, More)
+  plus the three Account pages (client login, register and dashboard).
   Pages opened on top (About, Team, Testimonials, Settings, project detail) are registered in AppShell.xaml.cs.
   The Shell.* colours use {DynamicResource ...} so they follow dark / light mode.
+
+  Shell.TabBarIsVisible="False": the built-in tab bar is HIDDEN, because on Windows it sits at the top.
+  Instead every tab page shows our own bar at the bottom (Controls/BottomNavBar.cs, added by the
+  "TabPage" template in App.xaml). The tabs below still exist so "//Home", "//Contact" ... keep working.
 -->
 <Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
@@ -16,7 +21,8 @@
        Shell.TabBarBackgroundColor="{DynamicResource Surface}"
        Shell.TabBarForegroundColor="{DynamicResource Navy}"
        Shell.TabBarTitleColor="{DynamicResource Navy}"
-       Shell.TabBarUnselectedColor="{DynamicResource Soft}">
+       Shell.TabBarUnselectedColor="{DynamicResource Soft}"
+       Shell.TabBarIsVisible="False">
 
     <TabBar>
         <ShellContent Title="Home" Icon="tab_home.png" Route="Home"
@@ -29,5 +35,13 @@
                       ContentTemplate="{DataTemplate pages:ContactPage}" />
         <ShellContent Title="More" Icon="tab_more.png" Route="More"
                       ContentTemplate="{DataTemplate pages:MorePage}" />
+
+        <!-- The "Account" button of the bottom bar opens one of these three -->
+        <ShellContent Title="Account" Route="ClientLogin"
+                      ContentTemplate="{DataTemplate pages:ClientLoginPage}" />
+        <ShellContent Title="Create Account" Route="ClientRegister"
+                      ContentTemplate="{DataTemplate pages:ClientRegisterPage}" />
+        <ShellContent Title="My Dashboard" Route="ClientDashboard"
+                      ContentTemplate="{DataTemplate pages:ClientDashboardPage}" />
     </TabBar>
 </Shell>

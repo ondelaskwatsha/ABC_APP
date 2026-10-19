@@ -54,6 +54,61 @@ public class QuoteRequest
 }
 
 // ============================================================================
+// CLIENT PORTAL  (Account tab: login + dashboard, same accounts as the website)
+// ============================================================================
+
+/// <summary>What the login page sends to the API (POST /api/client/login).</summary>
+public class ClientLoginRequest
+{
+    public string Email { get; set; } = "";
+    public string Password { get; set; } = "";
+}
+
+/// <summary>What the register page sends to the API (POST /api/client/register).</summary>
+public class ClientRegisterRequest
+{
+    public string Name { get; set; } = "";
+    public string Email { get; set; } = "";
+    public string Password { get; set; } = "";
+}
+
+/// <summary>What the API sends back after a good login (normal, register or Google).</summary>
+public class ClientLoginResult
+{
+    public string Token { get; set; } = "";
+    public string Name { get; set; } = "";
+    public string Email { get; set; } = "";
+}
+
+/// <summary>One quote request on the dashboard ("Your quote requests").</summary>
+public class ClientQuote
+{
+    public uint Id { get; set; }
+    public string Service { get; set; } = "";
+    public string Message { get; set; } = "";
+    public string Status { get; set; } = "New";
+    public DateTime? CreatedAt { get; set; }
+}
+
+/// <summary>One project on the dashboard ("Your projects").</summary>
+public class ClientProject
+{
+    public uint Id { get; set; }
+    public string Title { get; set; } = "";
+    public string Status { get; set; } = "";
+    public bool HasStatus => Status.Length > 0;
+}
+
+/// <summary>Everything the dashboard shows (GET /api/client/dashboard).</summary>
+public class ClientDashboard
+{
+    public string Name { get; set; } = "";
+    public string Email { get; set; } = "";
+    public List<ClientQuote> Quotes { get; set; } = new();
+    public List<ClientProject> Projects { get; set; } = new();
+}
+
+// ============================================================================
 // WEBSITE CONTENT  (the pages below read this; it is copied from the website)
 // ============================================================================
 

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+  ClientRegisterPage.xaml  -  CREATE A CLIENT ACCOUNT (opened from the login page).
+  The password is sent to the API, which saves only a bcrypt HASH of it (never the password itself).
+  Clients can also skip the form and use "Continue with Google" (single sign-on).
+-->
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:AndiswaConsultationApp.Controls"
+             x:Class="AndiswaConsultationApp.Pages.ClientRegisterPage"
+             BackgroundColor="{DynamicResource PageBg}"
+             ControlTemplate="{StaticResource TabPage}"
+             Shell.NavBarIsVisible="False">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="24,56,24,40" Spacing="8">
+
+            <!-- ===== 1. TITLE ===== -->
+            <controls:SectionHeader Tag="CLIENT PORTAL" TitleMain="Create your" TitleAccent="account." />
+
+            <Label Text="Follow your quote requests and projects in one place."
+                   FontSize="16" LineHeight="1.45" TextColor="{DynamicResource Muted}" Margin="0,14,0,10" />
+
+            <!-- ===== 2. THE FORM ===== -->
+            <Border Style="{StaticResource Card}" Padding="20,8,20,22">
+                <VerticalStackLayout Spacing="0">
+
+                    <Label Text="Full name" Style="{StaticResource FieldLabel}" />
+                    <Border Style="{StaticResource FieldBorder}">
+                        <Entry x:Name="NameEntry" Style="{StaticResource FieldEntry}"
+                               Placeholder="e.g. Amangile Skwatsha" Keyboard="Text"
+                               ReturnType="Next" Completed="OnNameCompleted" />
+                    </Border>
+
+                    <Label Text="Email address" Style="{StaticResource FieldLabel}" />
+                    <Border Style="{StaticResource FieldBorder}">
+                        <Entry x:Name="EmailEntry" Style="{StaticResource FieldEntry}"
+                               Placeholder="you@example.com" Keyboard="Email"
+                               IsSpellCheckEnabled="False" IsTextPredictionEnabled="False"
+                               ReturnType="Next" Completed="OnEmailCompleted" />
+                    </Border>
+
+                    <Label Text="Password" Style="{StaticResource FieldLabel}" />
+                    <Border Style="{StaticResource FieldBorder}">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Entry x:Name="PasswordEntry" Style="{StaticResource FieldEntry}"
+                                   Placeholder="At least 8 characters" IsPassword="True"
+                                   ReturnType="Next" Completed="OnPasswordCompleted" />
+                            <Label x:Name="ShowPasswordLabel" Grid.Column="1" Text="Show" FontSize="14"
+                                   FontAttributes="Bold" TextColor="{DynamicResource Steel}"
+                                   VerticalOptions="Center" Padding="8,0,0,0">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnShowPasswordTapped" />
+                                </Label.GestureRecognizers>
+                            </Label>
+                        </Grid>
+                    </Border>
+                    <Label Text="Use at least 8 characters, with at least one letter and one number."
+                           FontSize="12" TextColor="{DynamicResource Muted}" Margin="2,6,0,0" />
+
+                    <Label Text="Confirm password" Style="{StaticResource FieldLabel}" />
+                    <Border Style="{StaticResource FieldBorder}">
+                        <Entry x:Name="ConfirmEntry" Style="{StaticResource FieldEntry}"
+                               Placeholder="Type the password again" IsPassword="True"
+                               ReturnType="Go" Completed="OnRegisterClicked" />
+                    </Border>
+
+                    <!-- A red sentence when something is wrong (hidden until needed) -->
+                    <Label x:Name="ErrorLabel" IsVisible="False" FontSize="14" Margin="0,14,0,0"
+                           TextColor="{DynamicResource ErrorText}" />
+
+                    <Button x:Name="RegisterButton" Text="Create account" Style="{StaticResource PrimaryButton}"
+                            Margin="0,22,0,0" Clicked="OnRegisterClicked" />
+
+                    <ActivityIndicator x:Name="Busy" IsRunning="False" IsVisible="False"
+                                       Color="{DynamicResource Navy}" Margin="0,14,0,0" />
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- ===== 3. SINGLE SIGN-ON ===== -->
+            <Grid ColumnDefinitions="*,Auto,*" ColumnSpacing="12" Margin="0,22,0,8">
+                <BoxView HeightRequest="1" Color="{DynamicResource Line}" VerticalOptions="Center" />
+                <Label Grid.Column="1" Text="or" FontSize="14" TextColor="{DynamicResource Muted}" />
+                <BoxView Grid.Column="2" HeightRequest="1" Color="{DynamicResource Line}" VerticalOptions="Center" />
+            </Grid>
+            <controls:GoogleSignInButton />
+
+            <!-- ===== 4. ALREADY HAVE AN ACCOUNT? ===== -->
+            <Label Text="Already have an account?" FontSize="14" TextColor="{DynamicResource Muted}"
+                   HorizontalOptions="Center" Margin="0,22,0,0" />
+            <Button Text="Log in" Style="{StaticResource OutlineButton}" Clicked="OnLoginClicked" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

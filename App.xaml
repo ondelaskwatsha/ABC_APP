@@ -6,6 +6,7 @@
 -->
 <Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:AndiswaConsultationApp.Controls"
              x:Class="AndiswaConsultationApp.App">
     <Application.Resources>
         <ResourceDictionary>
@@ -129,6 +130,17 @@
                 <Setter Property="TextColor" Value="{DynamicResource Ink}" />
                 <Setter Property="Margin" Value="0,14,0,6" />
             </Style>
+
+            <!-- ============ TAB PAGE TEMPLATE ============
+                 Every tab page uses this with  ControlTemplate="{StaticResource TabPage}".
+                 It puts the page's own content on top (ContentPresenter)
+                 and the navigation bar at the bottom (BottomNavBar). -->
+            <ControlTemplate x:Key="TabPage">
+                <Grid RowDefinitions="*,Auto" RowSpacing="0">
+                    <ContentPresenter Grid.Row="0" />
+                    <controls:BottomNavBar Grid.Row="1" />
+                </Grid>
+            </ControlTemplate>
 
         </ResourceDictionary>
     </Application.Resources>

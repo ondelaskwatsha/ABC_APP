@@ -5,6 +5,7 @@
              xmlns:models="clr-namespace:AndiswaConsultationApp.Models"
              x:Class="AndiswaConsultationApp.Pages.MorePage"
              BackgroundColor="{DynamicResource PageBg}"
+             ControlTemplate="{StaticResource TabPage}"
              Shell.NavBarIsVisible="False">
 
     <ScrollView>

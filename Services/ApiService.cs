@@ -137,6 +137,128 @@ public class ApiService
         }
     }
 
+    // ------------------------------------------------------------------
+    // CLIENT PORTAL (Account tab)
+    // ------------------------------------------------------------------
+
+    /// <summary>
+    /// Logs a client in with email + password (POST {BaseUrl}client/login).
+    /// Returns the login details, or an error sentence to show on the page.
+    /// </summary>
+    public Task<(ClientLoginResult? Result, string Error)> LoginAsync(string email, string password) =>
+        PostForLoginAsync("client/login", new ClientLoginRequest { Email = email, Password = password });
+
+    /// <summary>
+    /// Creates a new client account (POST {BaseUrl}client/register) and logs it in.
+    /// The password travels to the API, which saves only a bcrypt HASH of it.
+    /// </summary>
+    public Task<(ClientLoginResult? Result, string Error)> RegisterAsync(string name, string email, string password) =>
+        PostForLoginAsync("client/register", new ClientRegisterRequest { Name = name, Email = email, Password = password });
+
+    // Login and register both send JSON and get back a token, so they share this code
+    private async Task<(ClientLoginResult? Result, string Error)> PostForLoginAsync<T>(string address, T body)
+    {
+        try
+        {
+            var response = await _http.PostAsJsonAsync(address, body, JsonOpts);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadFromJsonAsync<ClientLoginResult>(JsonOpts);
+                return result is null || result.Token.Length == 0
+                    ? (null, "The server sent an empty answer. Please try again.")
+                    : (result, "");
+            }
+
+            // 429 = too many tries in one minute (the API's password-guessing protection)
+            if (response.StatusCode == HttpStatusCode.TooManyRequests)
+                return (null, "Too many attempts. Please wait a minute and try again.");
+
+            // 400 / 401 / 409: show the API's own sentence, e.g. "Incorrect email or password."
+            return (null, await ReadServerErrorAsync(response));
+        }
+        catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException or JsonException)
+        {
+            return (null, FriendlyError(ex));
+        }
+    }
+
+    /// <summary>
+    /// SINGLE SIGN-ON with Google.
+    ///  1. Makes a random secret "session" code.
+    ///  2. Opens the browser at {BaseUrl}sso/google?session=CODE, where the client signs in with Google.
+    ///  3. Asks {BaseUrl}sso/result?session=CODE every 2 seconds until the API has the login ready.
+    /// Gives up after 5 minutes, or when the page cancels (the "Cancel" button).
+    /// </summary>
+    public async Task<(ClientLoginResult? Result, string Error)> GoogleSignInAsync(CancellationToken cancel)
+    {
+        // A random code nobody can guess (32 random bytes = 43 letters/numbers)
+        var session = Convert.ToBase64String(System.Security.Cryptography.RandomNumberGenerator.GetBytes(32))
+                             .TrimEnd('=').Replace('+', '-').Replace('/', '_');
+
+        try
+        {
+            // Open the browser (on Android a browser tab on top of the app, on Windows the normal browser)
+            var signInPage = new Uri(new Uri(ApiConfig.BaseUrl), $"sso/google?session={session}");
+            await Browser.Default.OpenAsync(signInPage, BrowserLaunchMode.SystemPreferred);
+
+            var giveUpAt = DateTime.UtcNow.AddMinutes(5);
+            while (DateTime.UtcNow < giveUpAt)
+            {
+                await Task.Delay(TimeSpan.FromSeconds(2), cancel);   // wait, then ask again
+
+                try
+                {
+                    var response = await _http.GetAsync($"sso/result?session={session}", cancel);
+
+                    if (response.StatusCode == HttpStatusCode.OK)
+                    {
+                        var result = await response.Content.ReadFromJsonAsync<ClientLoginResult>(JsonOpts, cancel);
+                        if (result is not null && result.Token.Length > 0)
+                            return (result, "");
+                    }
+                    // 202 = "not finished yet": just loop and ask again
+                }
+                catch (Exception ex) when (ex is HttpRequestException ||
+                                           (ex is TaskCanceledException && !cancel.IsCancellationRequested))
+                {
+                    // A short internet hiccup: keep trying until the 5 minutes are over
+                }
+            }
+
+            return (null, "Google sign-in took too long. Please try again.");
+        }
+        catch (OperationCanceledException) when (cancel.IsCancellationRequested)
+        {
+            return (null, "");   // the user pressed Cancel: no error to show
+        }
+        catch (Exception ex)
+        {
+            return (null, FriendlyError(ex));
+        }
+    }
+
+    /// <summary>
+    /// Gets the logged-in client's quote requests and projects (GET {BaseUrl}client/dashboard).
+    /// Throws UnauthorizedAccessException when the login has expired, so the page can log out.
+    /// </summary>
+    public async Task<ClientDashboard> GetDashboardAsync(string token)
+    {
+        // The token goes in the "Authorization" header of THIS request only
+        using var request = new HttpRequestMessage(HttpMethod.Get, "client/dashboard");
+        request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+
+        using var response = await _http.SendAsync(request);
+
+        if (response.StatusCode == HttpStatusCode.Unauthorized)
+            throw new UnauthorizedAccessException(await ReadServerErrorAsync(response));
+
+        response.EnsureSuccessStatusCode();   // any other error becomes an HttpRequestException
+
+        return await response.Content.ReadFromJsonAsync<ClientDashboard>(JsonOpts)
+               ?? throw new JsonException("The server sent an empty answer.");
+    }
+
     // The API sends errors like {"error": "Please enter a valid email address."}.
     // This reads the sentence inside "error" so the app can show it.
     private static async Task<string> ReadServerErrorAsync(HttpResponseMessage response)

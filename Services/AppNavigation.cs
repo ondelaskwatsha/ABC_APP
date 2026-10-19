@@ -14,9 +14,22 @@ namespace AndiswaConsultationApp.Services;
 
 public static class AppNavigation
 {
-    // Switch to one of the five tabs: "Home", "Services", "Portfolio", "Contact" or "More"
+    // The three Account pages (login, register, dashboard). They are tabs too (see AppShell.xaml), but the bottom bar
+    // shows them as ONE button called "Account".
+    public const string ClientLoginRoute = "ClientLogin";
+    public const string ClientDashboardRoute = "ClientDashboard";
+    public const string ClientRegisterRoute = "ClientRegister";
+
+    // Switch to one of the tabs: "Home", "Services", "Portfolio", "Contact" or "More"
     public static Task GoToTabAsync(string tab) =>
         Shell.Current.GoToAsync($"//{tab}");
+
+    // The "Account" button: the dashboard if the client is logged in, otherwise the login page
+    public static async Task GoToAccountAsync()
+    {
+        await ClientSession.LoadAsync();   // reads the saved login the first time
+        await GoToTabAsync(ClientSession.IsLoggedIn ? ClientDashboardRoute : ClientLoginRoute);
+    }
 
     // Open a page that is not a tab: "about", "team" or "testimonials"
     public static Task OpenPageAsync(string route) =>

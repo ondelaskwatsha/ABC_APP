@@ -5,6 +5,7 @@
              xmlns:models="clr-namespace:AndiswaConsultationApp.Models"
              x:Class="AndiswaConsultationApp.Pages.HomePage"
              BackgroundColor="{DynamicResource PageBg}"
+             ControlTemplate="{StaticResource TabPage}"
              Shell.NavBarIsVisible="False">
 
     <!-- RefreshView: pull the page down to load fresh data from the server -->
