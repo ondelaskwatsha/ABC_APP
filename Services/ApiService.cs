@@ -272,7 +272,8 @@ public class ApiService
         }
         catch (JsonException) { }
 
-        return "Something went wrong. Please try again.";
+        // No reason given: at least show the error number, it helps to find the problem
+        return $"Something went wrong (error {(int)response.StatusCode}). Please try again.";
     }
 
     // ------------------------------------------------------------------

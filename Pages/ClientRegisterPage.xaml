@@ -15,6 +15,11 @@
     <ScrollView>
         <VerticalStackLayout Padding="24,56,24,40" Spacing="8">
 
+            <!-- The studio logo (same black tile as the More page) -->
+            <Border BackgroundColor="Black" StrokeThickness="0" StrokeShape="RoundRectangle 18" Margin="0,0,0,18">
+                <Image Source="ab_logo.jpg" Aspect="AspectFit" HeightRequest="120" />
+            </Border>
+
             <!-- ===== 1. TITLE ===== -->
             <controls:SectionHeader Tag="CLIENT PORTAL" TitleMain="Create your" TitleAccent="account." />
 
