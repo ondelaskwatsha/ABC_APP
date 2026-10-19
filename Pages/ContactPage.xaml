@@ -4,6 +4,7 @@
              xmlns:controls="clr-namespace:AndiswaConsultationApp.Controls"
              x:Class="AndiswaConsultationApp.Pages.ContactPage"
              BackgroundColor="{DynamicResource PageBg}"
+             ControlTemplate="{StaticResource TabPage}"
              Shell.NavBarIsVisible="False">
 
     <ScrollView>

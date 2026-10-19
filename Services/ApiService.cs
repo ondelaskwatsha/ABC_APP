@@ -137,6 +137,63 @@ public class ApiService
         }
     }
 
+    // ------------------------------------------------------------------
+    // CLIENT PORTAL (Account tab)
+    // ------------------------------------------------------------------
+
+    /// <summary>
+    /// Logs a client in (POST {BaseUrl}client/login).
+    /// Returns the login details, or an error sentence to show on the login page.
+    /// </summary>
+    public async Task<(ClientLoginResult? Result, string Error)> LoginAsync(string email, string password)
+    {
+        try
+        {
+            var response = await _http.PostAsJsonAsync("client/login",
+                new ClientLoginRequest { Email = email, Password = password }, JsonOpts);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadFromJsonAsync<ClientLoginResult>(JsonOpts);
+                return result is null || result.Token.Length == 0
+                    ? (null, "The server sent an empty answer. Please try again.")
+                    : (result, "");
+            }
+
+            // 429 = too many tries in one minute (the API's password-guessing protection)
+            if (response.StatusCode == HttpStatusCode.TooManyRequests)
+                return (null, "Too many login attempts. Please wait a minute and try again.");
+
+            // 400 / 401: show the API's own sentence, e.g. "Incorrect email or password."
+            return (null, await ReadServerErrorAsync(response));
+        }
+        catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException or JsonException)
+        {
+            return (null, FriendlyError(ex));
+        }
+    }
+
+    /// <summary>
+    /// Gets the logged-in client's quote requests and projects (GET {BaseUrl}client/dashboard).
+    /// Throws UnauthorizedAccessException when the login has expired, so the page can log out.
+    /// </summary>
+    public async Task<ClientDashboard> GetDashboardAsync(string token)
+    {
+        // The token goes in the "Authorization" header of THIS request only
+        using var request = new HttpRequestMessage(HttpMethod.Get, "client/dashboard");
+        request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+
+        using var response = await _http.SendAsync(request);
+
+        if (response.StatusCode == HttpStatusCode.Unauthorized)
+            throw new UnauthorizedAccessException(await ReadServerErrorAsync(response));
+
+        response.EnsureSuccessStatusCode();   // any other error becomes an HttpRequestException
+
+        return await response.Content.ReadFromJsonAsync<ClientDashboard>(JsonOpts)
+               ?? throw new JsonException("The server sent an empty answer.");
+    }
+
     // The API sends errors like {"error": "Please enter a valid email address."}.
     // This reads the sentence inside "error" so the app can show it.
     private static async Task<string> ReadServerErrorAsync(HttpResponseMessage response)

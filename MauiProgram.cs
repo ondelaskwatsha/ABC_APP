@@ -23,12 +23,16 @@ public static class MauiProgram
 
         builder.Services.AddSingleton<ApiService>();
 
-        // The five tabs:
+        // The tabs:
         builder.Services.AddTransient<HomePage>();
         builder.Services.AddTransient<ServicesPage>();
         builder.Services.AddTransient<PortfolioPage>();
         builder.Services.AddTransient<ContactPage>();
         builder.Services.AddTransient<MorePage>();
+
+        // The client portal (the "Account" button of the bottom bar):
+        builder.Services.AddTransient<ClientLoginPage>();
+        builder.Services.AddTransient<ClientDashboardPage>();
 
         // The pages that open on top of a tab:
         builder.Services.AddTransient<AboutPage>();

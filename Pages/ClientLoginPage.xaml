@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+  ClientLoginPage.xaml  -  the CLIENT PORTAL login (the "Account" button of the bottom bar).
+  Clients log in with the SAME email and password they use on the website's client portal.
+  After a good login the app goes to ClientDashboardPage.
+-->
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:AndiswaConsultationApp.Controls"
+             x:Class="AndiswaConsultationApp.Pages.ClientLoginPage"
+             BackgroundColor="{DynamicResource PageBg}"
+             ControlTemplate="{StaticResource TabPage}"
+             Shell.NavBarIsVisible="False">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="24,56,24,40" Spacing="8">
+
+            <!-- ===== 1. TITLE ===== -->
+            <controls:SectionHeader Tag="CLIENT PORTAL" TitleMain="Welcome" TitleAccent="back." />
+
+            <Label Text="Log in to see your quote requests and follow your projects."
+                   FontSize="16" LineHeight="1.45" TextColor="{DynamicResource Muted}" Margin="0,14,0,10" />
+
+            <!-- ===== 2. THE FORM ===== -->
+            <Border Style="{StaticResource Card}" Padding="20,8,20,22">
+                <VerticalStackLayout Spacing="0">
+
+                    <Label Text="Email address" Style="{StaticResource FieldLabel}" />
+                    <Border Style="{StaticResource FieldBorder}">
+                        <Entry x:Name="EmailEntry" Style="{StaticResource FieldEntry}"
+                               Placeholder="you@example.com" Keyboard="Email"
+                               IsSpellCheckEnabled="False" IsTextPredictionEnabled="False"
+                               ReturnType="Next" Completed="OnEmailCompleted" />
+                    </Border>
+
+                    <Label Text="Password" Style="{StaticResource FieldLabel}" />
+                    <Border Style="{StaticResource FieldBorder}">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Entry x:Name="PasswordEntry" Style="{StaticResource FieldEntry}"
+                                   Placeholder="Your password" IsPassword="True"
+                                   ReturnType="Go" Completed="OnLoginClicked" />
+                            <!-- Tap "Show" to see what you typed -->
+                            <Label x:Name="ShowPasswordLabel" Grid.Column="1" Text="Show" FontSize="14"
+                                   FontAttributes="Bold" TextColor="{DynamicResource Steel}"
+                                   VerticalOptions="Center" Padding="8,0,0,0">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnShowPasswordTapped" />
+                                </Label.GestureRecognizers>
+                            </Label>
+                        </Grid>
+                    </Border>
+
+                    <!-- A red sentence when the login fails (hidden until needed) -->
+                    <Label x:Name="ErrorLabel" IsVisible="False" FontSize="14" Margin="0,14,0,0"
+                           TextColor="{DynamicResource ErrorText}" />
+
+                    <Button x:Name="LoginButton" Text="Log in" Style="{StaticResource PrimaryButton}"
+                            Margin="0,22,0,0" Clicked="OnLoginClicked" />
+
+                    <ActivityIndicator x:Name="Busy" IsRunning="False" IsVisible="False"
+                                       Color="{DynamicResource Navy}" Margin="0,14,0,0" />
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- ===== 3. NO ACCOUNT YET? ===== -->
+            <Label Text="Don't have an account yet?" FontSize="14" TextColor="{DynamicResource Muted}"
+                   HorizontalOptions="Center" Margin="0,22,0,0" />
+            <Button Text="Request a quote" Style="{StaticResource OutlineButton}" Clicked="OnRequestQuoteClicked" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
